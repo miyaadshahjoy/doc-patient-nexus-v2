@@ -74,21 +74,18 @@ const patientSchema = new mongoose.Schema(
         trim: true,
       },
     ],
-
     allergies: [
       {
         type: String,
         trim: true,
       },
     ],
-
     currentMedications: [
       {
         type: String,
         trim: true,
       },
     ],
-
     location: {
       type: {
         type: String,
@@ -168,7 +165,6 @@ patientSchema.virtual('age').get(function () {
 addInstanceMethods(patientSchema);
 
 // middlewares
-
 patientSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   if (this.isNew) this.passwordChangedAt = Date.now() - 1000;
