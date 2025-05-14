@@ -14,6 +14,7 @@ const DB_URI = process.env.DB_CONNECTION_STRING.replace(
   '<db_password>',
   process.env.DB_PASSWORD,
 );
+// const DB_LOCAL_URI = process.env.DB_LOCAL_CONNECTION_STRING;
 mongoose.connect(DB_URI).then(() => {
   console.log('DATABASE CONNECTED SUCCESSFULLY 😍');
 });

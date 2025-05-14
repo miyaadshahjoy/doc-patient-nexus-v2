@@ -1,4 +1,4 @@
-const Doctor = require('../models/doctorsModel');
+const Doctor = require('../models/doctorModel');
 const handlers = require('./handlerFactory');
 
 exports.createDoctor = handlers.createOne(Doctor);

@@ -86,3 +86,18 @@ exports.deleteOne = (Model) =>
     // });
     res.status(204).send();
   });
+
+exports.verifyAccount = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const user = await Model.findById(req.params.id);
+    if (!user) return next(new AppError('User does not exist.', 400));
+    if (user.isVerified)
+      return next(new AppError('User account is already verified.', 400));
+    user.isVerified = true;
+    user.status = 'active';
+    await user.save();
+    res.status(200).json({
+      status: 'success',
+      message: 'User verified successfully',
+    });
+  });

@@ -1,0 +1,164 @@
+🟢 Implement basic endpoints for /doctors resource
+    - Get all doctors
+    - Create doctor
+    - Get doctor by Id
+    - Update doctor
+    - Delete doctor
+
+🟢 Implement Error handling
+
+🟢 Hash the password while creating a new doctor(pre "save" hook)
+
+
+**YES, Miyaad!** Implementing password reset is one of the most critical security features in any real-world app — and a great move toward making `DocPatient Nexus` fully production-ready.
+
+---
+
+## 🔐 Password Reset Flow Overview
+
+Here’s the **battle-tested industry flow** you want to implement:
+
+1. **User hits “Forgot Password”**
+
+   * You generate a reset token
+   * Save a **hashed version** in DB
+   * Set `resetTokenExpires` field
+   * Send a reset URL with the **plain token** via email
+
+2. **User hits “Reset Password” URL**
+
+   * You grab the token from URL
+   * Hash it, look it up in DB with `resetTokenExpires > now`
+   * If valid, allow new password input
+   * Hash new password, reset `resetToken` fields
+
+---
+
+## 🧱 Step-by-Step Implementation
+
+### ✅ 1. Add fields to your Doctor model
+
+```js
+resetPasswordToken: String,
+resetPasswordExpires: Date,
+```
+
+---
+
+### ✅ 2. Add a method to generate the token
+
+Inside `doctorsModel.js`:
+
+```js
+const crypto = require('crypto');
+
+doctorSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  this.resetPasswordExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+  return resetToken; // plain version for email
+};
+```
+
+---
+
+### ✅ 3. Controller: `forgotPassword`
+
+```js
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const user = await Doctor.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with that email.', 404));
+  }
+
+  const resetToken = user.createPasswordResetToken();
+  await user.save({ validateBeforeSave: false });
+
+  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/doctors/resetPassword/${resetToken}`;
+
+  // Send email (you can use nodemailer here)
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Your password reset token (valid for 10 min)',
+      message: `Click this link to reset your password: ${resetURL}`,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email!',
+    });
+  } catch (err) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new AppError('There was an error sending the email. Try again later!', 500)
+    );
+  }
+});
+```
+
+---
+
+### ✅ 4. Controller: `resetPassword`
+
+```js
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await Doctor.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+
+  user.password = req.body.password;
+  user.confirmPassword = req.body.confirmPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+
+  // Optionally log the user in right after
+  const token = signToken(user._id); // you must have a signToken util
+  res.status(200).json({
+    status: 'success',
+    token,
+  });
+});
+```
+
+---
+
+## 🔚 TL;DR — What You Need
+
+| Step | What to build                                              |
+| ---- | ---------------------------------------------------------- |
+| ✅    | Model fields: `resetPasswordToken`, `resetPasswordExpires` |
+| ✅    | Method: `createPasswordResetToken()`                       |
+| ✅    | Controller: `forgotPassword()`                             |
+| ✅    | Controller: `resetPassword()`                              |
+| ✅    | Utility: `sendEmail()` (use nodemailer or MailTrap)        |
+| ✅    | Token signer: `signToken()`                                |
+
+---
+
+Say the word and I’ll give you:
+
+* A full `sendEmail.js` with nodemailer setup
+* The `signToken()` utility
+* Swagger doc descriptions for these endpoints
+  Ready to roll it all in?
