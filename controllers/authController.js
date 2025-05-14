@@ -163,9 +163,11 @@ exports.resetPassword = (Model) =>
     const user = await Model.findOne({ passwordResetToken });
     if (!user || user.passwordResetExpires < Date.now())
       return next(new AppError('Password reset token has expired', 400));
+
     // 2) If token has not expired, and there is user, set the new password
     user.password = password;
     user.passwordConfirm = passwordConfirm;
+
     // 3) Update changedPasswordAt property for the user
     user.passwordChangedAt = new Date();
     user.passwordResetToken = undefined;
