@@ -1,7 +1,7 @@
-const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const { addInstanceMethods } = require('../utils/schemaUtil');
 
 const adminSchema = new mongoose.Schema(
   {
@@ -98,33 +98,7 @@ const adminSchema = new mongoose.Schema(
 );
 
 // instance methods
-adminSchema.methods.correctPassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
-};
-
-adminSchema.methods.passwordChangedAfter = function (iat) {
-  // console.log(this.passwordChangedAt.getTime() / 1000, iat);
-  return this.passwordChangedAt.getTime() / 1000 > iat + 1;
-};
-
-adminSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(32).toString('hex');
-  this.passwordResetToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-  return resetToken;
-};
-adminSchema.methods.createEmailVerificationToken = function () {
-  const verificationToken = crypto.randomBytes(32).toString('hex');
-  this.emailVerificationToken = crypto
-    .createHash('sha256')
-    .update(verificationToken)
-    .digest('hex');
-  this.emailVerificationExpires = Date.now() + 10 * 60 * 1000;
-  return verificationToken;
-};
+addInstanceMethods(adminSchema);
 // middlewares
 
 adminSchema.pre('save', async function (next) {

@@ -3,7 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const { addInstanceMethods } = require('../utils/schemaUtil');
 
-const doctorSchema = new mongoose.Schema(
+const patientSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -55,38 +55,40 @@ const doctorSchema = new mongoose.Schema(
       },
       select: false,
     },
-    specialization: [
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: ['A+', 'B+', 'O+', 'A-', 'B-', 'O-', 'AB+', 'AB-'],
+        message:
+          'Blood group must be one of these: A+, B+, O+, A-, B-, O-, AB+, AB-',
+      },
+      required: [true, 'Blood group is required'],
+    },
+    dateOfBirth: {
+      type: Date,
+      required: [true, 'Date of birth is required'],
+    },
+    medicalHistory: [
       {
         type: String,
-        required: [true, 'At least one specialization is required'],
         trim: true,
       },
     ],
-    experience: {
-      type: Number,
-      required: [true, 'Experience (in years) is required'],
-    },
-    education: [
+
+    allergies: [
       {
-        degree: {
-          type: String,
-          trim: true,
-          required: [true, 'Degree is required in education'],
-        },
-        institute: {
-          type: String,
-          trim: true,
-          required: [true, 'Institute is required in education'],
-        },
+        type: String,
+        trim: true,
       },
     ],
-    averageRating: {
-      type: Number,
-      required: [true, 'Average rating is required'],
-      default: 4.5,
-      min: [1, 'Rating cannot be less than 1'],
-      max: [5, 'Rating cannot exceed 5'],
-    },
+
+    currentMedications: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+
     location: {
       type: {
         type: String,
@@ -98,7 +100,7 @@ const doctorSchema = new mongoose.Schema(
         required: true,
       },
       coordinates: {
-        type: [Number], // [longitude, latitude]
+        type: [Number],
         required: [true, 'Location coordinates are required'],
       },
       city: {
@@ -110,42 +112,6 @@ const doctorSchema = new mongoose.Schema(
         trim: true,
       },
     },
-    visitingHours: [
-      {
-        day: {
-          type: String,
-          trim: true,
-          required: [true, 'Day is required in visiting hours'],
-        },
-        hours: {
-          from: {
-            type: Date,
-            required: true,
-          },
-          to: {
-            type: Date,
-            required: true,
-          },
-        },
-      },
-    ],
-    availableDays: {
-      type: [String],
-      required: [true, 'Available days are required'],
-    },
-    consultationFees: {
-      type: Number,
-      required: [true, 'Consultation fee is required.'],
-    },
-    role: {
-      type: String,
-      default: 'doctor',
-      immutable: true,
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
     status: {
       type: String,
       enum: {
@@ -155,11 +121,19 @@ const doctorSchema = new mongoose.Schema(
       default: 'pending',
       trim: true,
     },
-    emailVerified: {
+    role: {
+      type: String,
+      default: 'patient',
+      immutable: true,
+    },
+    isVerified: {
       type: Boolean,
       default: false,
     },
-    ///////////////////////////////////////////
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    }, ///////////////////////////////////////////
     passwordChangedAt: {
       type: Date,
     },
@@ -174,16 +148,28 @@ const doctorSchema = new mongoose.Schema(
       select: false,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
-doctorSchema.index({ location: '2dsphere' });
+// virtual properties
+patientSchema.virtual('age').get(function () {
+  if (!this.dateOfBirth) return null;
+  return (
+    new Date(Date.now()).getFullYear() -
+    new Date(this.dateOfBirth).getFullYear()
+  );
+});
 
 // instance methods
-addInstanceMethods(doctorSchema);
+addInstanceMethods(patientSchema);
+
 // middlewares
 
-doctorSchema.pre('save', async function (next) {
+patientSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   if (this.isNew) this.passwordChangedAt = Date.now() - 1000;
   // Encrypt the password with bcrypt
@@ -193,12 +179,12 @@ doctorSchema.pre('save', async function (next) {
   next();
 });
 
-doctorSchema.pre(/^find/, function (next) {
+patientSchema.pre(/^find/, function (next) {
   // this points to the current query
   this.find({ status: { $ne: 'removed' } });
   next();
 });
 
-const Doctor = mongoose.model('Doctor', doctorSchema);
+const Patient = mongoose.model('Patient', patientSchema);
 
-module.exports = Doctor;
+module.exports = Patient;

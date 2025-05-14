@@ -5,6 +5,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const superAdminRouter = require('./routes/superAdminRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const doctorRouter = require('./routes/doctorRoutes');
+const patientRouter = require('./routes/patientRoutes');
 
 const app = express();
 
@@ -26,7 +27,7 @@ app.use(morgan('dev'));
 app.use('/api/v2/super-admins', superAdminRouter);
 app.use('/api/v2/admins', adminRouter);
 app.use('/api/v2/doctors', doctorRouter);
-
+app.use('/api/v2/patients', patientRouter);
 // handler function for unhandled routes
 app.all('*wildcard', (req, res) => {
   res.status(404).json({

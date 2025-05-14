@@ -5,6 +5,7 @@ const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
 const Admin = require('../models/adminModel');
 const Doctor = require('../models/doctorModel');
+const Patient = require('../models/patientModel');
 
 const router = express.Router();
 
@@ -50,6 +51,14 @@ router.patch(
   authController.protect(Admin),
   authController.restrictTo('admin'),
   handlerFactory.verifyAccount(Doctor),
+);
+
+// Approve Patient Accounts
+router.patch(
+  '/approve-patients/:id',
+  authController.protect(Admin),
+  authController.restrictTo('admin'),
+  handlerFactory.verifyAccount(Patient),
 );
 
 module.exports = router;
