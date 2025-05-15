@@ -1,5 +1,8 @@
 const express = require('express');
 // const adminController = require('../controllers/adminController');
+const {
+  checkAccountEligibility,
+} = require('../middlewares/verifyAccountStatus');
 const handlerFactory = require('../controllers/handlerFactory');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
@@ -27,7 +30,7 @@ router.patch(
   authController.protect(Admin),
   currentUserController.verifyEmail(Admin),
 );
-
+router.use(checkAccountEligibility(Admin));
 router.patch(
   '/me/password',
   authController.protect(Admin),

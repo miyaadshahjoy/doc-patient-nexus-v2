@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const catchAsync = require('../utils/catchAsync');
+const verifyAccountEligibility = require('../utils/verifyAccountEligibility');
 
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
@@ -36,6 +37,9 @@ exports.signin = (Model) =>
       return next(
         new AppError('Enter correct email and password to sign in', 400),
       );
+
+    // checking account eligibility
+    verifyAccountEligibility(user, next);
     // 3) If everything is ok, return jwt token
     const token = generateJWT(user._id, user.role);
     res.status(200);

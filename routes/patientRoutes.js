@@ -1,6 +1,10 @@
 const express = require('express');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
+const {
+  checkAccountEligibility,
+} = require('../middlewares/verifyAccountStatus');
+
 const Patient = require('../models/patientModel');
 
 const router = express.Router();
@@ -26,6 +30,7 @@ router.patch(
   currentUserController.verifyEmail(Patient),
 );
 
+router.use(checkAccountEligibility(Patient));
 router.patch(
   '/me/password',
   authController.protect(Patient),

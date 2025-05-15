@@ -2,6 +2,9 @@ const express = require('express');
 const doctorController = require('../controllers/doctorController');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
+const {
+  checkAccountEligibility,
+} = require('../middlewares/verifyAccountStatus');
 const Doctor = require('../models/doctorModel');
 
 const router = express.Router();
@@ -27,6 +30,7 @@ router.patch(
   currentUserController.verifyEmail(Doctor),
 );
 
+router.use(checkAccountEligibility(Doctor));
 router.patch(
   '/me/password',
   authController.protect(Doctor),
