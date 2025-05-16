@@ -73,7 +73,6 @@ exports.checkVisitingHours = catchAsync(async (req, res, next) => {
   // checking for already booked appointments on the same date
 
   const bookedApointments = await Appointment.find({ appointmentDate: date });
-  // console.log(bookeddApointments);
 
   // Checking the booked appointments schedule
   const bookedSchedules = bookedApointments.map((a) => [
@@ -87,7 +86,7 @@ exports.checkVisitingHours = catchAsync(async (req, res, next) => {
     );
     return !isBooked;
   });
-  // console.log(filteredSlots);
+
   res.status(200).json({
     status: 'success',
     message: 'Available visiting time slots retrieved successfully',
