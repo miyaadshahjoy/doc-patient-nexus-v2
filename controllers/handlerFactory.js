@@ -24,6 +24,7 @@ exports.readAll = (Model) =>
       .select()
       .paginate();
     const docs = await features.query;
+
     res.status(200).json({
       status: `success`,
       message: `${Model.modelName}s retrieved successfully.`,
