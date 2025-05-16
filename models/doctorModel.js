@@ -9,7 +9,7 @@ const doctorSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Full name is required'],
       minLength: [1, 'Full name must contain atleast 1 character'],
-      maxLength: [30, 'Fullname must not exceed 30 characters'],
+      maxLength: [30, 'Full name must not exceed 30 characters'],
       trim: true,
     },
     email: {
@@ -110,29 +110,61 @@ const doctorSchema = new mongoose.Schema(
         trim: true,
       },
     },
-    visitingHours: [
-      {
-        day: {
-          type: String,
-          trim: true,
-          required: [true, 'Day is required in visiting hours'],
-        },
-        hours: {
-          from: {
-            type: Date,
-            required: true,
+    visitingSchedule: {
+      type: [
+        {
+          day: {
+            type: String,
+            enum: {
+              values: [
+                'saturday',
+                'sunday',
+                'monday',
+                'tuesday',
+                'wednesday',
+                'thursday',
+                'friday',
+              ],
+              message: 'Day must be a valid weekday',
+            },
+
+            trim: true,
+            required: [true, 'Day is required in visiting schedule'],
           },
-          to: {
-            type: Date,
-            required: true,
+          hours: {
+            from: {
+              type: String, //HH:MM
+              required: true,
+            },
+            to: {
+              type: String, //HH:MM
+              required: true,
+            },
           },
         },
+      ],
+      validate: {
+        validator: function (schedule) {
+          const days = schedule.map((s) => s.day.toLowerCase());
+          const hasDuplicateDays = new Set(days).size !== days.length;
+          if (hasDuplicateDays) return false;
+          const invalidTimeRange = schedule.some((s) => {
+            const [fromHour, fromMin] = s.hours.from.split(':').map(Number);
+            const [toHour, toMin] = s.hours.to.split(':').map(Number);
+
+            const fromTotal = fromHour * 60 + fromMin;
+            const toTotal = toHour * 60 + toMin;
+
+            return fromTotal >= toTotal;
+          });
+          if (invalidTimeRange) return false;
+          return true;
+        },
+        message:
+          'Each day in the schedule must be unique and "from" time must be before "to" time.',
       },
-    ],
-    availableDays: {
-      type: [String],
-      required: [true, 'Available days are required'],
     },
+
     consultationFees: {
       type: Number,
       required: [true, 'Consultation fee is required.'],

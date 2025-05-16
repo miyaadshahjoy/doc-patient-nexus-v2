@@ -2,13 +2,25 @@ const express = require('express');
 const doctorController = require('../controllers/doctorController');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
+const appointmentController = require('../controllers/appointmentController');
 const {
   checkAccountEligibility,
 } = require('../middlewares/verifyAccountStatus');
 const Doctor = require('../models/doctorModel');
+const Patient = require('../models/patientModel');
 
 const router = express.Router();
 
+router.post(
+  '/:id/available-visiting-hours',
+  authController.protect(Patient),
+  appointmentController.checkVisitingHours,
+);
+router.post(
+  '/:id/book-appointment',
+  authController.protect(Patient),
+  appointmentController.bookAppointment,
+);
 router
   .route('/')
   .get(doctorController.getDoctors) // Impl: Get all doctors document

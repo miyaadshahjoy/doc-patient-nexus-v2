@@ -1,13 +1,16 @@
 const express = require('express');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
+const doctorRouter = require('./doctorRoutes');
+
 const {
   checkAccountEligibility,
 } = require('../middlewares/verifyAccountStatus');
 
 const Patient = require('../models/patientModel');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
+router.use('/doctors', doctorRouter);
 
 router.post('/forgot-password', authController.forgotPassword(Patient));
 router.post(
