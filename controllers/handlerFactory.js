@@ -1,5 +1,6 @@
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const APIFeatures = require('../utils/apiFeatures');
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -15,7 +16,14 @@ exports.createOne = (Model) =>
 
 exports.readAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const docs = await Model.find();
+    const queryObject = req.query;
+    const query = Model.find();
+    const features = new APIFeatures(query, queryObject)
+      .filter()
+      .sort()
+      .select()
+      .paginate();
+    const docs = await features.query;
     res.status(200).json({
       status: `success`,
       message: `${Model.modelName}s retrieved successfully.`,

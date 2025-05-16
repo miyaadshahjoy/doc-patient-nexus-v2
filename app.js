@@ -23,6 +23,9 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Query String parser
+app.set('query parser', require('qs').parse);
+
 //Routes
 app.use('/api/v2/super-admins', superAdminRouter);
 app.use('/api/v2/admins', adminRouter);

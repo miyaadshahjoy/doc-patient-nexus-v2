@@ -44,8 +44,14 @@ const appointmentSchema = new mongoose.Schema(
       enum: ['pending', 'paid'],
       default: 'pending',
     },
+    paymentMethod: {
+      type: String,
+      enum: ['card', 'cash'],
+    },
   },
   { timestamps: true },
 );
+
 const Appointment = mongoose.model('Appointment', appointmentSchema);
+
 module.exports = Appointment;

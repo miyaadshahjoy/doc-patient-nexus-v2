@@ -9,6 +9,17 @@ const Doctor = require('../models/doctorModel');
 
 const router = express.Router();
 
+router
+  .route('/')
+  .get(doctorController.getDoctors) // Impl: Get all doctors document
+  .post(doctorController.createDoctor); // Impl: Create doctor
+
+router
+  .route('/:id')
+  .get(doctorController.getDoctor) // Impl: Get doctor by Id
+  .patch(doctorController.updateDoctor) // Impl: Update doctor
+  .delete(doctorController.deleteDoctor); // Impl: Delete doctor
+
 router.post('/forgot-password', authController.forgotPassword(Doctor));
 router.post(
   '/reset-password/:resetToken',
@@ -47,19 +58,5 @@ router.delete(
   authController.protect(Doctor),
   currentUserController.deleteCurrentUser(Doctor),
 );
-router
-  .route('/')
-  .get(
-    authController.protect(Doctor),
-    authController.restrictTo('doctor'),
-    doctorController.getDoctors,
-  ) // Impl: Get all doctors document
-  .post(doctorController.createDoctor); // Impl: Create doctor
-
-router
-  .route('/:id')
-  .get(doctorController.getDoctor) // Impl: Get doctor by Id
-  .patch(doctorController.updateDoctor) // Impl: Update doctor
-  .delete(doctorController.deleteDoctor); // Impl: Delete doctor
 
 module.exports = router;
