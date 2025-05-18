@@ -25,11 +25,11 @@ const appointmentSchema = new mongoose.Schema(
         hours: {
           from: {
             type: String,
-            required: true,
+            required: [true, 'Provide schedule start time'],
           },
           to: {
             type: String,
-            required: true,
+            required: [true, 'Provide schedule end time'],
           },
         },
       },
