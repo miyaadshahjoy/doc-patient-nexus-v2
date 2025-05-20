@@ -53,7 +53,7 @@ exports.bookAppointment = catchAsync(async (req, res, next) => {
     (s) =>
       s.from === requestedSlot.hours.from && s.to === requestedSlot.hours.to,
   );
-  // console.log(isSlotAvailable);
+
   if (!isSlotAvailable)
     return next(
       new AppError(

@@ -67,8 +67,6 @@ const getAvailableSlots = async (doctor, date) => {
 
   const bookedSlots = await getBookedSlots(doctor, date);
 
-  // =======================================================
-
   const now = DateTime.now();
 
   // Turn booked slot pairs into a Set of "from-to" strings
