@@ -25,11 +25,16 @@ const generateTimeSlots = (schedule, appointmentDuration) => {
     );
 
   const slots = Array.from(
-    { length: Math.floor(availableMinutes / appointmentDuration) },
+    {
+      length: Math.floor(availableMinutes / appointmentDuration),
+    },
     (_, i) => {
       const slotStart = startMinutes + i * appointmentDuration;
       const slotEnd = slotStart + appointmentDuration - 1;
-      return { from: formatTime(slotStart), to: formatTime(slotEnd) };
+      return {
+        from: formatTime(slotStart),
+        to: formatTime(slotEnd),
+      };
     },
   );
   return slots;
@@ -58,6 +63,7 @@ const getAvailableSlots = async (doctor, date) => {
   const dayOfWeek = DateTime.fromISO(date).toFormat('cccc').toLowerCase();
 
   const schedule = doctor.visitingSchedule.find((s) => s.day === dayOfWeek);
+
   if (!schedule)
     throw new AppError('Doctor is not available on the requested date', 400);
 
@@ -76,6 +82,7 @@ const getAvailableSlots = async (doctor, date) => {
     const slotKey = `${s.from}-${s.to}`;
     const isBooked = bookedSet.has(slotKey);
     let passedCurrentTime = false;
+
     const slotStartTime = DateTime.fromFormat(s.from, 'HH:mm').set({
       year: now.year,
       month: now.month,
