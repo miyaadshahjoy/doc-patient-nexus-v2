@@ -34,6 +34,7 @@ const generateTimeSlots = (schedule, appointmentDuration) => {
       return {
         from: formatTime(slotStart),
         to: formatTime(slotEnd),
+        available: true,
       };
     },
   );
@@ -44,6 +45,7 @@ const getBookedSlots = async (doctor, date) => {
   const bookedApointments = await Appointment.find({
     doctor,
     appointmentDate: date,
+    status: { $ne: 'cancelled' },
   });
 
   const bookedSlots = bookedApointments.map((a) => [
@@ -74,11 +76,10 @@ const getAvailableSlots = async (doctor, date) => {
   const bookedSlots = await getBookedSlots(doctor, date);
 
   const now = DateTime.now();
-
   // Turn booked slot pairs into a Set of "from-to" strings
   const bookedSet = new Set(bookedSlots.map(([from, to]) => `${from}-${to}`));
 
-  const availableSlots = slots.filter((s) => {
+  slots.forEach((s) => {
     const slotKey = `${s.from}-${s.to}`;
     const isBooked = bookedSet.has(slotKey);
     let passedCurrentTime = false;
@@ -92,9 +93,10 @@ const getAvailableSlots = async (doctor, date) => {
     const isToday = DateTime.fromISO(date).hasSame(now, 'day');
     if (isToday) passedCurrentTime = slotStartTime < now;
 
-    return !isBooked && !passedCurrentTime;
+    if (isBooked || passedCurrentTime) s.available = false;
   });
 
+  const availableSlots = slots.filter((s) => s.available);
   return availableSlots;
 };
 

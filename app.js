@@ -1,11 +1,14 @@
 const express = require('express');
 const morgan = require('morgan');
+
 const globalErrorHandler = require('./controllers/errorController');
 
 const superAdminRouter = require('./routes/superAdminRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const doctorRouter = require('./routes/doctorRoutes');
 const patientRouter = require('./routes/patientRoutes');
+const appointmenRouter = require('./routes/appointmentRoutes');
+const appointmentController = require('./controllers/appointmentController');
 
 const app = express();
 
@@ -13,9 +16,15 @@ app.get('/', (req, res) => {
   res.status(200);
   res.json({
     status: 'success',
-    data: 'Homepage',
+    data: 'DocPatient Nexus',
   });
 });
+// Webhook Route
+app.post(
+  '/api/v2/appointments/webhooks',
+  express.raw({ type: 'application/json' }),
+  appointmentController.stripeWebhookHandler,
+);
 
 // middlewares
 // 3rd party middlewares
@@ -31,6 +40,8 @@ app.use('/api/v2/super-admins', superAdminRouter);
 app.use('/api/v2/admins', adminRouter);
 app.use('/api/v2/doctors', doctorRouter);
 app.use('/api/v2/patients', patientRouter);
+app.use('/api/v2/appointments', appointmenRouter);
+
 // handler function for unhandled routes
 app.all('*wildcard', (req, res) => {
   res.status(404).json({
