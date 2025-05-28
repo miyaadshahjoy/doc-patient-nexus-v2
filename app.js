@@ -1,15 +1,16 @@
 const express = require('express');
 const morgan = require('morgan');
-
+const cors = require('cors');
+// Importing routes and controllers
 const globalErrorHandler = require('./controllers/errorController');
-
+const appointmentController = require('./controllers/appointmentController');
 const superAdminRouter = require('./routes/superAdminRoutes');
 const adminRouter = require('./routes/adminRoutes');
 const doctorRouter = require('./routes/doctorRoutes');
 const patientRouter = require('./routes/patientRoutes');
 const appointmenRouter = require('./routes/appointmentRoutes');
-const appointmentController = require('./controllers/appointmentController');
 
+// Initialize express app
 const app = express();
 
 app.get('/', (req, res) => {
@@ -28,6 +29,8 @@ app.post(
 
 // middlewares
 // 3rd party middlewares
+// CORS middleware
+app.use(cors());
 // body parser middleware
 app.use(express.json());
 app.use(morgan('dev'));
