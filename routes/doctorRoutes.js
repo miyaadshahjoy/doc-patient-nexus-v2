@@ -21,6 +21,7 @@ router.post(
   authController.protect(Patient),
   appointmentController.bookAppointment,
 );
+
 router
   .route('/')
   .get(doctorController.getDoctors) // Impl: Get all doctors document

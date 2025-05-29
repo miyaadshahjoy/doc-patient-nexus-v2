@@ -1,6 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs-config/swagger-config');
+const doctorDocs = require('./docs-sources/routes/doctorDocs');
 // Importing routes and controllers
 const globalErrorHandler = require('./controllers/errorController');
 const appointmentController = require('./controllers/appointmentController');
@@ -28,6 +31,8 @@ app.post(
 );
 
 // middlewares
+// Serving static files from the 'public' directory
+app.use(express.static('public'));
 // 3rd party middlewares
 // CORS middleware
 app.use(cors());
@@ -44,6 +49,13 @@ app.use('/api/v2/admins', adminRouter);
 app.use('/api/v2/doctors', doctorRouter);
 app.use('/api/v2/patients', patientRouter);
 app.use('/api/v2/appointments', appointmenRouter);
+
+// Swagger Documentation
+
+swaggerSpec.paths = {
+  ...swaggerSpec.paths,
+  ...doctorDocs.paths, // Merging doctorDocs paths into swaggerSpec
+};
 
 // handler function for unhandled routes
 app.all('*wildcard', (req, res) => {
