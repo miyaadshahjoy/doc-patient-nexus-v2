@@ -1,5 +1,5 @@
 const swaggerJsDoc = require('swagger-jsdoc');
-const doctorDocs = require('../docs-sources/routes/doctorDocs');
+const doctorDocs = require('../sources/routes/doctorDocs');
 const path = require('path');
 
 const options = {
@@ -26,8 +26,8 @@ const options = {
       },
     ],
     components: {
-      schemas: require('../docs-sources/components/schemas'),
-      responses: require('../docs-sources/components/responses'),
+      schemas: require('../sources/components/schemas'),
+      responses: require('../sources/components/responses'),
       securitySchemes: {
         bearerAuth: {
           type: 'http',

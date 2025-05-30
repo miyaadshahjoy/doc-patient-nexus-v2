@@ -1,0 +1,22 @@
+.swagger-ui .opblock-body pre.microlight {
+  background-color: #1e1e2e !important;
+}
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+.swagger-ui pre,
+.swagger-ui code,
+.swagger-ui span,
+.swagger-ui tr,
+.swagger-ui td {
+  font-family: 'Fira Code', monospace !important;
+}
+
+.swagger-ui button,
+.swagger-ui .btn,
+.swagger-ui .button {
+  font-size: 1rem !important;
+  letter-spacing: 1px !important;
+  padding: 7px 13.5px;
+}
+.swagger-ui topbar {
+  display: none;
+}
