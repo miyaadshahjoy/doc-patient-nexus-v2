@@ -2,8 +2,11 @@ const express = require('express');
 const authController = require('../controllers/authController');
 const appointmentController = require('../controllers/appointmentController');
 const Patient = require('../models/patientModel');
+const reviewRouter = require('./reviewRoutes');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
+
+router.use('/:id/reviews', reviewRouter);
 
 router.get(
   '/:id/checkout-session',

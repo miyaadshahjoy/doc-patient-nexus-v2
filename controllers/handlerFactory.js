@@ -88,11 +88,7 @@ exports.deleteOne = (Model) =>
         new AppError(`No ${Model.modelName} found with the provided Id`, 404),
       );
     }
-    // res.status(204).json({
-    //   status: `success`,
-    //   message: `${Model.modelName} deleted successfully.`,
-    //   data: null,
-    // });
+
     res.status(204).send();
   });
 
