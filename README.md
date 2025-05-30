@@ -63,7 +63,7 @@ A robust, scalable, and production-ready API built for managing doctor-patient a
 
 📖 API Docs available at:
 
-- [](https://docpatient-nexus.onrender.com/)
+- [https://docpatient-nexus.onrender.com/api/v2/docs/](https://docpatient-nexus.onrender.com/api/v2/docs/)
 
 ---
 
