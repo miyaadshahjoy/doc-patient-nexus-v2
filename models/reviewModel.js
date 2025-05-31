@@ -50,9 +50,9 @@ const reviewSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-reviewSchema.statics.calcAverageRating = async function (doctorId) {
+reviewSchema.statics.calcAverageRating = async function (doctorId, session) {
   if (!doctorId) {
-    console.error('❌ Doctor ID is missing in the review document.');
+    console.error('❌ Doctor ID is required to calculate average rating.');
     return;
   }
   const [aggregatedObj] = await this.aggregate([
@@ -68,13 +68,15 @@ reviewSchema.statics.calcAverageRating = async function (doctorId) {
         avgRating: { $avg: '$rating' },
       },
     },
-  ]);
+  ])
+    .session(session) // Using session for transaction support
+    .exec(); // Using exec() to ensure the query is executed
 
   // updating the doctors' document in DB
   try {
-    const doctor = await Doctor.findById(doctorId);
+    const doctor = await Doctor.findById(doctorId).session(session);
     if (!doctor) {
-      console.error('❌ Doctor not found with ID:', doctorId);
+      console.error('❌ Doctor not found with ID: ', doctorId);
       return;
     }
     if (!aggregatedObj) {
@@ -84,17 +86,18 @@ reviewSchema.statics.calcAverageRating = async function (doctorId) {
     } else {
       const { avgRating, numRating } = aggregatedObj;
 
-      doctor.averageRating = avgRating;
+      doctor.averageRating = Math.round(avgRating * 10) / 10; // rounding to one decimal place
       doctor.numRating = numRating;
     }
 
-    await doctor.save();
+    await doctor.save({ session });
     console.log('✅ Doctor rating updated successfully:', doctor.averageRating);
   } catch (err) {
-    console.error('❌ Error updating doctor rating:', err);
+    console.error('❌ Error updating doctor rating:', err.message);
   }
 };
 
+/*
 reviewSchema.post('save', async function () {
   this.constructor.calcAverageRating(this.doctor);
 });
@@ -102,6 +105,10 @@ reviewSchema.post('save', async function () {
 reviewSchema.post(/^findOneAnd/, async (doc) => {
   doc.constructor.calcAverageRating(doc.doctor);
 });
+
+// Adding a unique index to prevent duplicate reviews by the same patient for the same doctor on the same appointment
+*/
+reviewSchema.index({ doctor: 1, patient: 1, appointment: 1 }, { unique: true }); // Adding a compound index to optimize queries for reviews by doctor and patient
 
 const Review = mongoose.model('Review', reviewSchema);
 

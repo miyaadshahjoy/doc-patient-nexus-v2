@@ -11,6 +11,11 @@ const Patient = require('../models/patientModel');
 
 const router = express.Router();
 
+router.get(
+  '/doctors-within/:distance/center/:latlng/unit/:unit',
+  doctorController.getDoctorsWithin, // Impl: Get doctors within a certain distance from a given location
+);
+
 router.post(
   '/:id/available-visiting-hours',
   authController.protect(Patient),
