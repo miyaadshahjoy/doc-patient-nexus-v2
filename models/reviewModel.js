@@ -97,17 +97,6 @@ reviewSchema.statics.calcAverageRating = async function (doctorId, session) {
   }
 };
 
-/*
-reviewSchema.post('save', async function () {
-  this.constructor.calcAverageRating(this.doctor);
-});
-
-reviewSchema.post(/^findOneAnd/, async (doc) => {
-  doc.constructor.calcAverageRating(doc.doctor);
-});
-
-// Adding a unique index to prevent duplicate reviews by the same patient for the same doctor on the same appointment
-*/
 reviewSchema.index({ doctor: 1, patient: 1, appointment: 1 }, { unique: true }); // Adding a compound index to optimize queries for reviews by doctor and patient
 
 const Review = mongoose.model('Review', reviewSchema);
