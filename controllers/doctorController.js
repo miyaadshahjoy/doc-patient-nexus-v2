@@ -10,7 +10,6 @@ exports.updateDoctor = handlers.updateOne(Doctor);
 exports.deleteDoctor = handlers.deleteOne(Doctor);
 
 // Find doctors within a certain distance from a given location
-
 exports.getDoctorsWithin = catchAsync(async (req, res, next) => {
   if (!req.params.distance || !req.params.latlng || !req.params.unit) {
     return next(new AppError('Please provide distance, latlng and unit', 400));
