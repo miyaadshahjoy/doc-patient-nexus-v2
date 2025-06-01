@@ -234,3 +234,133 @@ exports.resetPassword = (Model) =>
       message: 'Password updated successfully.',
     });
   });
+
+exports.sendEmailVerification = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const resourceName = `${Model.modelName.toLowerCase()}`;
+    // Check if request body is empty or email is not provided
+    if (!req.body || !req.body.email)
+      return next(
+        new AppError(`Please provide an email to send verification link.`, 400),
+      );
+
+    // Check email format
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email))
+      return next(new AppError('Please provide a valid email address.', 400));
+
+    // Check if user exists with the provided email
+    const user = await Model.findOne({ email: req.body.email });
+
+    if (!user)
+      return next(
+        new AppError(
+          `No ${resourceName} found with the provided email address.`,
+          404,
+        ),
+      );
+
+    if (user.emailVerified)
+      return next(new AppError('Email is already verified', 400));
+
+    const verificationToken = user.createEmailVerificationToken();
+    await user.save();
+
+    const url = `${process.env.FRONTEND_URL}/api/v2/doctors/email-verificaion/${verificationToken}`;
+    const message = `
+      You requested an email verification.\n\n
+      Click the link below to verify your email. This link is valid for 10 minutes.\n
+      ${url}.\n\n
+      If you didn’t request this, please ignore this email.
+    `;
+    const emailOptions = {
+      to: user.email,
+      subject: 'Email verification link (Expires in 10 minutes)',
+      message,
+    };
+    try {
+      await sendEmail(emailOptions);
+    } catch (err) {
+      user.emailVerificationToken = undefined;
+      user.emailVerificationExpires = undefined;
+      await user.save({ validateBeforeSave: false });
+      return next(
+        new AppError(
+          'There was an error sending the email. Please try after some time.',
+          500,
+        ),
+      );
+    }
+    res.status(200).json({
+      status: 'success',
+      message: 'Email verification link sent successfully. Check your inbox.',
+    });
+  });
+
+exports.verifyEmail = (Model) =>
+  catchAsync(async (req, res, next) => {
+    // Check if token is provided
+    if (!req.params.token)
+      return next(
+        new AppError('No verification token found in the request.', 404),
+      );
+
+    // decrypt the token to get the email
+    let decoded;
+    try {
+      decoded = jwt.verify(req.params.token, process.env.JWT_SECRET_KEY);
+    } catch (err) {
+      console.error('Token verification failed. ', err);
+      return next(new AppError('Invalid or expired token.', 400));
+    }
+
+    const { email } = decoded;
+    if (!email)
+      return next(
+        new AppError('Email address is missing in token payload.', 400),
+      );
+    // Check if email is already verified
+    const existingUser = await Model.findOne({ email }).select(
+      '+emailVerificationToken +emailVerificationExpires',
+    );
+    console.log(existingUser);
+
+    if (!existingUser)
+      return next(new AppError('No user found wih this email', 404));
+
+    // If email is already verified, return an error
+    if (existingUser.emailVerified)
+      return next(new AppError('Email is already verified', 400));
+
+    // Hash the token to compare with the stored token
+    const hashedVerificationToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    console.log(
+      existingUser.emailVerificationToken !== hashedVerificationToken,
+      existingUser.emailVerificationToken,
+      hashedVerificationToken,
+    );
+    if (
+      existingUser.emailVerificationToken !== hashedVerificationToken ||
+      existingUser.emailVerificationExpires < Date.now()
+    )
+      return next(
+        new AppError(
+          'The email verification link is invalid or has expired',
+          400,
+        ),
+      );
+
+    // If user exists, verify the email
+    existingUser.emailVerified = true;
+    existingUser.emailVerificationToken = undefined;
+    existingUser.emailVerificationExpires = undefined;
+    await existingUser.save();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Email verified successfully.',
+    });
+  });

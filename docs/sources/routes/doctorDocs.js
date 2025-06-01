@@ -638,5 +638,174 @@ module.exports = {
         },
       },
     },
+    '/api/v2/doctors/email-verification': {
+      post: {
+        tags: ['Doctors'],
+        summary: 'Send email verification link',
+        description:
+          '**Sends an email verification link to the doctor’s registered email address. The email address is also sent along with the verification token.**',
+        operationId: 'sendEmailVerification',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['email'],
+                properties: {
+                  email: {
+                    type: 'string',
+                    format: 'email',
+                    example: 'zarin.hossain@example.com',
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Email verification link sent successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Email verification link sent successfully. Please check your inbox.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description:
+              'Bad request. Possibly due to invalid email format or missing email.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'fail' },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Invalid email format or missing email. Please provide a valid email address.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: 'No doctor found with the provided email address.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'fail' },
+                    message: {
+                      type: 'string',
+                      example:
+                        'No doctor found with the provided email address. Please check the email and try again.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+    },
+    '/api/v2/doctors/email-verification/{token}': {
+      patch: {
+        tags: ['Doctors'],
+        summary: 'Verify doctor’s email.',
+        description:
+          '**Verifies the doctor’s email using the token sent to their email address.**',
+        operationId: 'verifyDoctorEmail',
+        parameters: [
+          {
+            name: 'token',
+            in: 'path',
+            required: true,
+            description: 'Email verification token',
+            schema: {
+              type: 'string',
+              example: 'verification-token-here',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Email verified successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Email verified successfully.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description:
+              'Bad request. Possibly due to invalid or expired token.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'fail' },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Invalid or expired email verificaion token. Please request a new verification link.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description:
+              'No doctor found with the provided token or token does not exist.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: { type: 'string', example: 'fail' },
+                    message: {
+                      type: 'string',
+                      example: 'No verfication token found.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+    },
   },
 };

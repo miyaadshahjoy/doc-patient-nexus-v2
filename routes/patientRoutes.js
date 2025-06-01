@@ -23,15 +23,15 @@ router.post('/signup', authController.signup(Patient));
 router.post('/signin', authController.signin(Patient));
 
 router.get(
-  '/me/email-verification',
-  authController.protect(Patient),
-  currentUserController.sendEmailVerification(Patient),
+  '/email-verification',
+
+  authController.sendEmailVerification(Patient),
 );
 
 router.patch(
-  '/me/email-verification/:token',
-  authController.protect(Patient),
-  currentUserController.verifyEmail(Patient),
+  '/email-verification/:token',
+
+  authController.verifyEmail(Patient),
 );
 
 router.use(checkAccountEligibility(Patient));

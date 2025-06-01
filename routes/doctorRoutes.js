@@ -47,17 +47,12 @@ router.post(
 router.post('/signup', authController.signup(Doctor));
 router.post('/signin', authController.signin(Doctor));
 
-router.get(
-  '/me/email-verification',
-  authController.protect(Doctor),
-  currentUserController.sendEmailVerification(Doctor),
+router.post(
+  '/email-verification',
+  authController.sendEmailVerification(Doctor),
 );
 
-router.patch(
-  '/me/email-verification/:token',
-  authController.protect(Doctor),
-  currentUserController.verifyEmail(Doctor),
-);
+router.patch('/email-verification/:token', authController.verifyEmail(Doctor));
 
 router.use(checkAccountEligibility(Doctor));
 router.patch(

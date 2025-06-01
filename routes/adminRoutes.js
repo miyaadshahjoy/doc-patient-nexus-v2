@@ -19,16 +19,12 @@ router.post('/reset-password/:resetToken', authController.resetPassword(Admin));
 router.post('/signup', authController.signup(Admin));
 router.post('/signin', authController.signin(Admin));
 
-router.get(
-  '/me/email-verification',
-  authController.protect(Admin),
-  currentUserController.sendEmailVerification(Admin),
-);
+router.get('/email-verification', authController.sendEmailVerification(Admin));
 
 router.patch(
-  '/me/email-verification/:token',
-  authController.protect(Admin),
-  currentUserController.verifyEmail(Admin),
+  '/email-verification/:token',
+
+  authController.verifyEmail(Admin),
 );
 router.use(checkAccountEligibility(Admin));
 router.patch(
