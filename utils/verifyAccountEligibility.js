@@ -3,7 +3,7 @@ const AppError = require('./appError');
 module.exports = (user) => {
   if (!user.emailVerified)
     throw new AppError(
-      'Please verify your email before accessing the system',
+      'Please verify your email before accessing the system.',
       401,
     );
   if (!user.isVerified)

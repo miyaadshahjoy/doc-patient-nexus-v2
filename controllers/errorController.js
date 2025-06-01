@@ -1,12 +1,13 @@
 const AppError = require('../utils/appError');
 
 const handleCastErrorDB = (err) => {
-  const message = `Invalid ${err.path}: ${err.value}`;
+  const message = `Invalid value "${err.value}" for field "${err.path}"`;
   return new AppError(message, 400);
 };
 const handleDuplicateFieldsDB = (err) => {
   const [value] = Object.values(err.keyValue);
-  const message = `Duplicate field value "${value}". You have to use another value`;
+  const [field] = Object.keys(err.keyValue);
+  const message = `Duplicate value "${value} for  field ${field}". You have to use another value`;
   return new AppError(message, 400);
 };
 
@@ -33,12 +34,12 @@ const sendErrorProd = (err, res) => {
   } else {
     // Programming or other unknown error: don't leak error details
     //   1) Log error
-    // console.log('ERROR: ', err);
+    console.error('💥 Unhandled Error:', err);
 
     //   2) Send generic message
     res.status(500).json({
       status: 'error',
-      message: 'Something went very wrong',
+      message: 'Something went wrong. Please try again later.',
     });
   }
 };
@@ -51,10 +52,7 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'CastError') err = handleCastErrorDB(err);
     if (err.code === 11000) err = handleDuplicateFieldsDB(err);
     if (err.name === 'ValidationError') err = handleValidationErrorDB(err);
+    // Production error handling
     sendErrorProd(err, res);
   }
-  //   res.status(err.statusCode).json({
-  //     status: err.status,
-  //     message: err.message,
-  //   });
 };

@@ -7,50 +7,99 @@ const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 
 const generateJWT = (id, role) =>
-  jwt.sign({ id, role }, process.env.JWT_SECRET_KEY);
+  jwt.sign({ id, role }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRES_IN || '30d',
+  });
 
-// Impl: SIGN UP
+// Impl: SIGN UP -
+// Implemented the signup function
 exports.signup = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (!req.body)
+      return next(new AppError('Please provide user data to sign up', 400));
+
+    if (req.body.phone || req.body.email) {
+      // 1) Check if email already exists
+      let existingUser = await Model.find({ email: req.body.email });
+      if (existingUser.length > 0)
+        return next(
+          new AppError(
+            'Email already exists. Please use a different email.',
+            409,
+          ),
+        );
+
+      // Check if phone number already exists
+      existingUser = await Model.find({ phone: req.body.phone });
+      if (existingUser.length > 0)
+        return next(
+          new AppError(
+            'Phone number already exists. Please use a different phone number',
+            409,
+          ),
+        );
+    }
+
+    // Create new user
     const newUser = await Model.create(req.body);
+    if (!newUser)
+      return next(
+        new AppError('Failed to create user. Please try again.', 500),
+      );
+    newUser.password = undefined; // Remove password from response
+
+    const resourceName = `${Model.modelName}`;
     const token = generateJWT(newUser._id, newUser.role);
     res.status(201);
     res.json({
       status: 'success',
       jwt: token,
+      message: `${resourceName} registered successfully.`,
       data: {
-        user: newUser,
+        [resourceName]: newUser,
       },
     });
   });
 
 exports.signin = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (!req.body)
+      return next(
+        new AppError('Please provide email and password to sign in', 400),
+      );
     // 1) Check if email and password exists
     const { email, password } = req.body;
     if (!email || !password)
       return next(new AppError('Enter email and password to sign in', 400));
     // 2) Check if email exists and password is correct
-    const [user] = await Model.find({ email }).select('+password');
+    const user = await Model.findOne({ email }).select('+password');
 
     if (!user || !(await user.correctPassword(password)))
       return next(
-        new AppError('Enter correct email and password to sign in', 400),
+        new AppError(
+          'Invalid email or password.Please provide valid credentials.',
+          400,
+        ),
       );
 
     // checking account eligibility
-    verifyAccountEligibility(user, next);
+    verifyAccountEligibility(user);
     // 3) If everything is ok, return jwt token
     const token = generateJWT(user._id, user.role);
+    const resourceName = `${Model.modelName}`;
+    user.password = undefined; // Remove password from response
+    // 4) Send response
     res.status(200);
     res.json({
       status: 'success',
       jwt: token,
+      message: `${resourceName} signed in successfully.`,
       data: {
         user,
       },
     });
   });
+
 // Authentication
 exports.protect = (Model) =>
   catchAsync(async (req, res, next) => {

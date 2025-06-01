@@ -51,10 +51,33 @@ const doctorSchema = new mongoose.Schema(
         validator: function (el) {
           return this.password === el;
         },
-        message: 'Passwords do not match',
+        message: 'Passwords do not match.',
       },
       select: false,
     },
+    education: [
+      {
+        type: {
+          degree: {
+            type: String,
+            trim: true,
+            required: [true, 'Degree is required in education'],
+          },
+          institute: {
+            type: String,
+            trim: true,
+            required: [true, 'Institute is required in education'],
+          },
+        },
+        required: [true, 'Education details are required'],
+        validate: {
+          validator: function (arr) {
+            return arr.length > 0;
+          },
+          message: 'At least one education detail is required',
+        },
+      },
+    ],
     specialization: [
       {
         type: String,
@@ -66,54 +89,47 @@ const doctorSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Experience (in years) is required'],
     },
-    education: [
-      {
-        degree: {
-          type: String,
-          trim: true,
-          required: [true, 'Degree is required in education'],
-        },
-        institute: {
-          type: String,
-          trim: true,
-          required: [true, 'Institute is required in education'],
-        },
-      },
-    ],
+
     averageRating: {
       type: Number,
-      required: [true, 'Average rating is required'],
       default: 4.5,
-      min: [1, 'Rating cannot be less than 1'],
-      max: [5, 'Rating cannot exceed 5'],
+      min: [1, 'Average rating must be at least 1'],
+      max: [5, 'Average rating must not exceed 5'],
     },
     numRating: {
       type: Number,
       default: 0,
     },
+    // location: required
+
     location: {
       type: {
         type: String,
+        enum: ['Point'],
         default: 'Point',
-        enum: {
-          values: ['Point'],
-          message: 'Location type must be "Point"',
-        },
-        required: true,
       },
       coordinates: {
-        type: [Number], // [longitude, latitude]
-        required: [true, 'Location coordinates are required'],
+        type: [Number],
+        required: [true, 'Coordinates are required'],
+        validate: {
+          validator: function (coords) {
+            return coords.length === 2; // Ensure it's a pair of coordinates
+          },
+          message: 'Coordinates must be an array of two numbers',
+        },
       },
       city: {
         type: String,
+        required: [true, 'City is required'],
         trim: true,
       },
       address: {
         type: String,
+        required: [true, 'Address is required'],
         trim: true,
       },
     },
+
     visitingSchedule: {
       type: [
         {
@@ -167,15 +183,16 @@ const doctorSchema = new mongoose.Schema(
         message:
           'Each day in the schedule must be unique and "from" time must be before "to" time.',
       },
+      required: [true, 'Visiting schedule is required'],
     },
 
-    consultationFees: {
-      type: Number,
-      required: [true, 'Consultation fee is required.'],
-    },
     appointmentDuration: {
       type: Number,
       default: 60, // in minutes
+    },
+    consultationFees: {
+      type: Number,
+      required: [true, 'Consultation fee is required.'],
     },
     role: {
       type: String,
@@ -203,8 +220,15 @@ const doctorSchema = new mongoose.Schema(
     passwordChangedAt: {
       type: Date,
     },
-    passwordResetToken: String,
-    passwordResetExpires: Date,
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+      select: false,
+    },
     emailVerificationToken: {
       type: String,
       select: false,

@@ -1,6 +1,6 @@
 const swaggerJsDoc = require('swagger-jsdoc');
-const doctorDocs = require('../sources/routes/doctorDocs');
 const path = require('path');
+const doctorDocs = require('../sources/routes/doctorDocs');
 
 const options = {
   definition: {

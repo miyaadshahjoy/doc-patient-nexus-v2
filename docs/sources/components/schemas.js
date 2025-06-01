@@ -8,28 +8,30 @@ module.exports = {
       'gender',
       'password',
       'passwordConfirm',
+      'education',
       'specialization',
       'experience',
-      'averageRating',
       'location',
+      'visitingSchedule',
       'consultationFees',
     ],
+
     properties: {
       _id: {
         type: 'string',
-        example: '664c3b5587dfcd3a41e80c21',
+        example: '682787f1fea3f44089558cd6',
       },
       fullName: {
         type: 'string',
-        example: 'Dr. John Doe',
+        example: 'Zarif Hossain',
       },
       email: {
         type: 'string',
-        example: 'johndoe@example.com',
+        example: 'zarif.hossain@example.com',
       },
       phone: {
         type: 'string',
-        example: '+1234567890',
+        example: '+880 1720 111234',
       },
       gender: {
         type: 'string',
@@ -38,17 +40,17 @@ module.exports = {
       },
       profilePhoto: {
         type: 'string',
-        example: 'https://cdn.example.com/images/john.jpg',
+        example: 'https://cdn.example.com/images/zarif.jpg',
       },
       password: {
         type: 'string',
         format: 'password',
-        example: 'strongPassword123',
+        example: 'pass1234',
       },
       passwordConfirm: {
         type: 'string',
         format: 'password',
-        example: 'strongPassword123',
+        example: 'pass1234',
       },
       specialization: {
         type: 'array',
@@ -73,7 +75,7 @@ module.exports = {
             },
             institute: {
               type: 'string',
-              example: 'Harvard Medical School',
+              example: 'Dhaka Medical College',
             },
           },
         },
@@ -98,15 +100,15 @@ module.exports = {
             items: {
               type: 'number',
             },
-            example: [-73.935242, 40.73061],
+            example: [90.389, 23.746],
           },
           city: {
             type: 'string',
-            example: 'New York',
+            example: 'Dhaka',
           },
           address: {
             type: 'string',
-            example: '1234 Medical Lane, NY',
+            example: 'Green Road, Dhaka',
           },
         },
       },
@@ -147,7 +149,7 @@ module.exports = {
       },
       consultationFees: {
         type: 'number',
-        example: 5000,
+        example: 1000,
       },
       appointmentDuration: {
         type: 'number',
@@ -174,10 +176,21 @@ module.exports = {
       createdAt: {
         type: 'string',
         format: 'date-time',
+        example: '2025-05-16T18:46:09.776Z',
       },
       updatedAt: {
         type: 'string',
         format: 'date-time',
+        example: '2025-05-31T02:45:43.207Z',
+      },
+      passwordChangedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-16T18:46:08.776Z',
+      },
+      numRating: {
+        type: 'number',
+        example: 10,
       },
     },
   },

@@ -5,11 +5,12 @@ const APIFeatures = require('../utils/apiFeatures');
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const newDoc = await Model.create(req.body);
+    const resourceName = `${Model.modelName}`;
     res.status(201).json({
       status: `success`,
-      message: `${Model.modelName} created successfully.`,
+      message: `${resourceName} created successfully.`,
       data: {
-        doc: newDoc,
+        [resourceName]: newDoc,
       },
     });
   });
@@ -25,12 +26,14 @@ exports.readAll = (Model) =>
       .paginate();
     const docs = await features.query;
 
+    const resourceName = `${Model.modelName.toLowerCase()}s`;
+
     res.status(200).json({
       status: `success`,
-      message: `${Model.modelName}s retrieved successfully.`,
+      message: `Successfully fetched all ${resourceName}.`,
+      results: docs.length,
       data: {
-        results: docs.length,
-        docs,
+        [resourceName]: docs,
       },
     });
   });
@@ -39,10 +42,17 @@ exports.readOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     const doc = await Model.findById(id);
+    const resourceName = `${Model.modelName.toLowerCase()}`;
 
+    // Validate id
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return next(new AppError(`Invalid ${resourceName} ID format.`, 400));
+    }
+
+    // Check if document exists
     if (!doc) {
       return next(
-        new AppError(`No ${Model.modelName} found with the provided Id.`, 404),
+        new AppError(`No ${resourceName} found with the provided ID.`, 404),
       );
       // return res.status(404).json({
       //   status: `fail`,
@@ -51,9 +61,9 @@ exports.readOne = (Model) =>
     }
     res.status(200).json({
       status: `success`,
-      message: `${Model.modelName} retrieved successfully.`,
+      message: `Successfully fetched the ${resourceName}'s details.`,
       data: {
-        doc,
+        [resourceName]: doc,
       },
     });
   });
