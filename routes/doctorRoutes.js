@@ -3,6 +3,8 @@ const doctorController = require('../controllers/doctorController');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
 const appointmentController = require('../controllers/appointmentController');
+// const handlerFactory = require('../controllers/handlerFactory');
+const prescriptionController = require('../controllers/prescriptionController');
 const {
   checkAccountEligibility,
 } = require('../middlewares/verifyAccountStatus');
@@ -10,6 +12,13 @@ const Doctor = require('../models/doctorModel');
 const Patient = require('../models/patientModel');
 
 const router = express.Router();
+
+// TODO: might change the route in the future
+router.post(
+  '/appointments/:id/prescription',
+  authController.protect(Doctor),
+  prescriptionController.createPrescription, // Impl: Create prescription for an appointment
+);
 
 router.get(
   '/doctors-within/:distance/center/:latlng/unit/:unit',

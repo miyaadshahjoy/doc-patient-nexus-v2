@@ -194,4 +194,90 @@ module.exports = {
       },
     },
   },
+  Medication: {
+    type: 'object',
+    required: ['name', 'dosage', 'frequency', 'duration'],
+    properties: {
+      name: {
+        type: 'string',
+        example: 'Aspirin',
+      },
+      dosage: {
+        type: 'string',
+        example: '500mg',
+      },
+      frequency: {
+        type: 'string',
+        example: 'Twice a day',
+      },
+      duration: {
+        type: 'number',
+        example: 7, // in days
+      },
+      instruction: {
+        type: 'string',
+        example: 'Take with water, do not exceed the recommended dosage.',
+      },
+    },
+  },
+  Prescription: {
+    type: 'object',
+    required: ['doctor', 'patient', 'appointment', 'medications'],
+    properties: {
+      doctor: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd6',
+      },
+      patient: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd7',
+      },
+      appointment: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd8',
+      },
+      notes: {
+        type: 'string',
+        example: 'Take the medication after meals.',
+      },
+      status: {
+        type: 'string',
+        enum: ['active', 'expired', 'deleted'],
+        default: 'active',
+      },
+      medications: {
+        type: 'array',
+        items: {
+          $ref: '#/components/schemas/Medication',
+        },
+        example: [
+          {
+            name: 'Aspirin',
+            dosage: '500mg',
+            frequency: 'Twice a day',
+            duration: 7,
+            instruction:
+              'Take with water, do not exceed the recommended dosage.',
+          },
+          {
+            name: 'Paracetamol',
+            dosage: '500mg',
+            frequency: 'Once a day',
+            duration: 5,
+            instruction: 'Take after meals.',
+          },
+        ],
+      },
+      createdAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-16T18:46:09.776Z',
+      },
+      updatedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-31T02:45:43.207Z',
+      },
+    },
+  },
 };
