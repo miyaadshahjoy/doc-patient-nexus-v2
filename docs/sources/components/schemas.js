@@ -1,4 +1,88 @@
 module.exports = {
+  Admin: {
+    type: 'object',
+    required: [
+      'fullName',
+      'email',
+      'phone',
+      'gender',
+      'password',
+      'passwordConfirm',
+    ],
+
+    properties: {
+      _id: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd5',
+      },
+      fullName: {
+        type: 'string',
+        example: 'Ahsan Habib',
+      },
+      email: {
+        type: 'string',
+        example: 'ahsan.habib@example.com',
+      },
+      phone: {
+        type: 'string',
+        example: '+8801712345678',
+      },
+      gender: {
+        type: 'string',
+        enum: ['male', 'female', 'others', 'prefer not to say'],
+        example: 'male',
+      },
+      profilePhoto: {
+        type: 'string',
+        example: 'https://example.com/photos/ahsan_habib.jpg',
+      },
+      password: {
+        type: 'string',
+        format: 'password',
+        example: 'pass1234',
+      },
+      passwordConfirm: {
+        type: 'string',
+        format: 'password',
+        example: 'pass1234',
+      },
+      role: {
+        type: 'string',
+        enum: ['admin', 'super-admin'],
+        default: 'admin',
+        example: 'admin',
+      },
+      isVerified: {
+        type: 'boolean',
+        example: false,
+      },
+      status: {
+        type: 'string',
+        enum: ['active', 'pending', 'removed'],
+        example: 'pending',
+      },
+      emailVerified: {
+        type: 'boolean',
+        example: false,
+      },
+      passwordChangedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-06-02T14:20:00.000Z',
+      },
+
+      createdAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-06-02T14:20:00.000Z',
+      },
+      updatedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-06-02T14:20:00.000Z',
+      },
+    },
+  },
   Doctor: {
     type: 'object',
     required: [

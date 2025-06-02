@@ -7,8 +7,8 @@ const handlerFactory = require('../controllers/handlerFactory');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
 const Admin = require('../models/adminModel');
+const Doctor = require('../models/doctorModel');
 const Patient = require('../models/patientModel');
-const { Doctor } = require('../docs/sources/components/schemas');
 
 const router = express.Router();
 
@@ -19,14 +19,14 @@ router.post('/reset-password/:resetToken', authController.resetPassword(Admin));
 router.post('/signup', authController.signup(Admin));
 router.post('/signin', authController.signin(Admin));
 
-router.get('/email-verification', authController.sendEmailVerification(Admin));
+router.post('/email-verification', authController.sendEmailVerification(Admin));
 
 router.patch(
   '/email-verification/:token',
 
   authController.verifyEmail(Admin),
 );
-router.use(checkAccountEligibility(Admin));
+// router.use(checkAccountEligibility(Admin));
 router.patch(
   '/me/password',
   authController.protect('admin'),
@@ -48,6 +48,7 @@ router.delete(
 router.patch(
   '/approve-doctors/:id',
   authController.protect('admin'),
+  checkAccountEligibility(Admin),
   authController.restrictTo('admin'),
   handlerFactory.verifyAccount(Doctor),
 );
@@ -56,6 +57,7 @@ router.patch(
 router.patch(
   '/approve-patients/:id',
   authController.protect('admin'),
+  checkAccountEligibility(Admin),
   authController.restrictTo('admin'),
   handlerFactory.verifyAccount(Patient),
 );

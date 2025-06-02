@@ -7,7 +7,10 @@ module.exports = (user) => {
       401,
     );
   if (!user.isVerified)
-    throw new AppError('Your account is pending approval by an admin', 403);
+    throw new AppError(
+      'Your account is pending approval by an admin or super admin.',
+      403,
+    );
   if (user.status === 'pending')
     throw new AppError('Your account is still under review', 403);
   if (user.status === 'removed')

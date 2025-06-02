@@ -1,6 +1,8 @@
 const swaggerJsDoc = require('swagger-jsdoc');
 const path = require('path');
+const adminDocs = require('../sources/routes/adminDocs');
 const doctorDocs = require('../sources/routes/doctorDocs');
+const prescriptionDocs = require('../sources/routes/prescriptionDocs');
 
 const options = {
   definition: {
@@ -60,6 +62,8 @@ const options = {
 const swaggerSpec = swaggerJsDoc(options);
 swaggerSpec.paths = {
   ...swaggerSpec.paths,
-  ...doctorDocs.paths, // Merging doctorDocs paths into swaggerSpec
+  ...adminDocs.paths,
+  ...doctorDocs.paths,
+  ...prescriptionDocs.paths, // Merging doctorDocs paths into swaggerSpec
 };
 module.exports = swaggerSpec;

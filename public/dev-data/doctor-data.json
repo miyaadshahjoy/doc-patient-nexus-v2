@@ -1,0 +1,562 @@
+[
+  {
+    "fullName": "Sayedul Islam",
+    "email": "sayedul.islam@example.com",
+    "phone": "+8801713456789",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/sayedul_islam.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Chittagong Medical College" },
+      { "degree": "MD", "institute": "BSMMU" }
+    ],
+    "specialization": ["Neurology"],
+    "experience": 10,
+    "averageRating": 4.8,
+    "numRating": 150,
+    "location": {
+      "type": "Point",
+      "coordinates": [91.834, 22.3569],
+      "city": "Chittagong",
+      "address": "456 Zakir Hossain Road, Khulshi"
+    },
+    "visitingSchedule": [
+      { "day": "sunday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "tuesday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1200
+  },
+  {
+    "fullName": "Nusrat Jahan",
+    "email": "nusrat.jahan@example.com",
+    "phone": "+8801814567890",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/nusrat_jahan.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Rajshahi Medical College" }
+    ],
+    "specialization": ["Pediatrics"],
+    "experience": 6,
+    "averageRating": 4.6,
+    "numRating": 80,
+    "location": {
+      "type": "Point",
+      "coordinates": [88.6241, 24.3636],
+      "city": "Rajshahi",
+      "address": "789 Kumarpara, Rajshahi"
+    },
+    "visitingSchedule": [
+      { "day": "monday", "hours": { "from": "08:00", "to": "12:00" } },
+      { "day": "thursday", "hours": { "from": "14:00", "to": "17:00" } }
+    ],
+    "appointmentDuration": 20,
+    "consultationFees": 1000
+  },
+  {
+    "fullName": "Kamrul Hasan",
+    "email": "kamrul.hasan@example.com",
+    "phone": "+8801912345678",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/kamrul_hasan.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Sylhet MAG Osmani Medical College" },
+      { "degree": "MS", "institute": "BSMMU" }
+    ],
+    "specialization": ["Orthopedics"],
+    "experience": 12,
+    "averageRating": 4.9,
+    "numRating": 200,
+    "location": {
+      "type": "Point",
+      "coordinates": [91.869, 24.8918],
+      "city": "Sylhet",
+      "address": "101 Chowhatta, Sylhet"
+    },
+    "visitingSchedule": [
+      { "day": "tuesday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "friday", "hours": { "from": "15:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 40,
+    "consultationFees": 1500
+  },
+  {
+    "fullName": "Tahmina Akter",
+    "email": "tahmina.akter@example.com",
+    "phone": "+8801715678901",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/tahmina_akter.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [{ "degree": "MBBS", "institute": "Dhaka Medical College" }],
+    "specialization": ["Gynecology"],
+    "experience": 7,
+    "averageRating": 4.5,
+    "numRating": 90,
+    "location": {
+      "type": "Point",
+      "coordinates": [90.4074, 23.7104],
+      "city": "Dhaka",
+      "address": "321 Green Road, Dhaka"
+    },
+    "visitingSchedule": [
+      { "day": "sunday", "hours": { "from": "11:00", "to": "15:00" } },
+      { "day": "wednesday", "hours": { "from": "16:00", "to": "20:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1300
+  },
+  {
+    "fullName": "Mahmudul Haque",
+    "email": "mahmudul.haque@example.com",
+    "phone": "+8801816789012",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/mahmudul_haque.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Khulna Medical College" },
+      { "degree": "FCPS", "institute": "BCPS" }
+    ],
+    "specialization": ["Dermatology"],
+    "experience": 9,
+    "averageRating": 4.7,
+    "numRating": 110,
+    "location": {
+      "type": "Point",
+      "coordinates": [89.5403, 22.8456],
+      "city": "Khulna",
+      "address": "654 KDA Avenue, Khulna"
+    },
+    "visitingSchedule": [
+      { "day": "monday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "thursday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 25,
+    "consultationFees": 1100
+  },
+  {
+    "fullName": "Rokeya Begum",
+    "email": "rokeya.begum@example.com",
+    "phone": "+8801913456789",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/rokeya_begum.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Mymensingh Medical College" }
+    ],
+    "specialization": ["Endocrinology"],
+    "experience": 5,
+    "averageRating": 4.4,
+    "numRating": 60,
+    "location": {
+      "type": "Point",
+      "coordinates": [90.25, 24.75],
+      "city": "Mymensingh",
+      "address": "123 Charpara, Mymensingh"
+    },
+    "visitingSchedule": [
+      { "day": "tuesday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "friday", "hours": { "from": "14:00", "to": "17:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1000
+  },
+  {
+    "fullName": "Abdul Karim",
+    "email": "abdul.karim@example.com",
+    "phone": "+8801716789013",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/abdul_karim.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Barisal Medical College" },
+      { "degree": "MD", "institute": "BSMMU" }
+    ],
+    "specialization": ["Gastroenterology"],
+    "experience": 11,
+    "averageRating": 4.8,
+    "numRating": 140,
+    "location": {
+      "type": "Point",
+      "coordinates": [90.3667, 22.701],
+      "city": "Barisal",
+      "address": "456 Hospital Road, Barisal"
+    },
+    "visitingSchedule": [
+      { "day": "sunday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "wednesday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1400
+  },
+  {
+    "fullName": "Shirin Sultana",
+    "email": "shirin.sultana@example.com",
+    "phone": "+8801817890123",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/shirin_sultana.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [{ "degree": "MBBS", "institute": "Rangpur Medical College" }],
+    "specialization": ["Ophthalmology"],
+    "experience": 6,
+    "averageRating": 4.6,
+    "numRating": 85,
+    "location": {
+      "type": "Point",
+      "coordinates": [89.25, 25.75],
+      "city": "Rangpur",
+      "address": "789 Station Road, Rangpur"
+    },
+    "visitingSchedule": [
+      { "day": "monday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "thursday", "hours": { "from": "14:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 25,
+    "consultationFees": 1100
+  },
+  {
+    "fullName": "Imran Hossain",
+    "email": "imran.hossain@example.com",
+    "phone": "+8801914567890",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/imran_hossain.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Dhaka Medical College" },
+      { "degree": "FCPS", "institute": "BCPS" }
+    ],
+    "specialization": ["Urology"],
+    "experience": 10,
+    "averageRating": 4.7,
+    "numRating": 130,
+    "location": {
+      "type": "Point",
+      "coordinates": [90.4011, 23.72],
+      "city": "Dhaka",
+      "address": "101 Uttara, Sector 4, Dhaka"
+    },
+    "visitingSchedule": [
+      { "day": "tuesday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "friday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1400
+  },
+  {
+    "fullName": "Ayesha Siddika",
+    "email": "ayesha.siddika@example.com",
+    "phone": "+8801717890124",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/ayesha_siddika.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Chittagong Medical College" }
+    ],
+    "specialization": ["ENT"],
+    "experience": 5,
+    "averageRating": 4.5,
+    "numRating": 70,
+    "location": {
+      "type": "Point",
+      "coordinates": [91.82, 22.35],
+      "city": "Chittagong",
+      "address": "321 Agrabad, Chittagong"
+    },
+    "visitingSchedule": [
+      { "day": "sunday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "wednesday", "hours": { "from": "14:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 20,
+    "consultationFees": 1000
+  },
+  {
+    "fullName": "Rafiqul Islam",
+    "email": "rafiqul.islam@example.com",
+    "phone": "+8801818901234",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/rafiqul_islam.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Rajshahi Medical College" },
+      { "degree": "MD", "institute": "BSMMU" }
+    ],
+    "specialization": ["Cardiology", "Internal Medicine"],
+    "experience": 15,
+    "averageRating": 4.9,
+    "numRating": 180,
+    "location": {
+      "type": "Point",
+      "coordinates": [88.6, 24.37],
+      "city": "Rajshahi",
+      "address": "456 Laxmipur, Rajshahi"
+    },
+    "visitingSchedule": [
+      { "day": "monday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "thursday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1600
+  },
+  {
+    "fullName": "Salma Akter",
+    "email": "salma.akter@example.com",
+    "phone": "+8801915678901",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/salma_akter.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Sylhet MAG Osmani Medical College" }
+    ],
+    "specialization": ["Pediatrics"],
+    "experience": 4,
+    "averageRating": 4.4,
+    "numRating": 50,
+    "location": {
+      "type": "Point",
+      "coordinates": [91.86, 24.9],
+      "city": "Sylhet",
+      "address": "789 Zindabazar, Sylhet"
+    },
+    "visitingSchedule": [
+      { "day": "tuesday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "friday", "hours": { "from": "14:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 25,
+    "consultationFees": 900
+  },
+  {
+    "fullName": "Anwar Hossain",
+    "email": "anwar.hossain@example.com",
+    "phone": "+8801718901235",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/anwar_hossain.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Khulna Medical College" },
+      { "degree": "FCPS", "institute": "BCPS" }
+    ],
+    "specialization": ["Neurology"],
+    "experience": 8,
+    "averageRating": 4.6,
+    "numRating": 100,
+    "location": {
+      "type": "Point",
+      "coordinates": [89.55, 22.85],
+      "city": "Khulna",
+      "address": "101 Boyra, Khulna"
+    },
+    "visitingSchedule": [
+      { "day": "sunday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "wednesday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1300
+  },
+  {
+    "fullName": "Farida Yasmin",
+    "email": "farida.yasmin@example.com",
+    "phone": "+8801819012345",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/farida_yasmin.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [{ "degree": "MBBS", "institute": "Barisal Medical College" }],
+    "specialization": ["Gynecology"],
+    "experience": 7,
+    "averageRating": 4.5,
+    "numRating": 95,
+    "location": {
+      "type": "Point",
+      "coordinates": [90.35, 22.7],
+      "city": "Barisal",
+      "address": "321 Natullabad, Barisal"
+    },
+    "visitingSchedule": [
+      { "day": "monday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "thursday", "hours": { "from": "14:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1200
+  },
+  {
+    "fullName": "Khalid Mahmud",
+    "email": "khalid.mahmud@example.com",
+    "phone": "+8801916789012",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/khalid_mahmud.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Mymensingh Medical College" },
+      { "degree": "MD", "institute": "BSMMU" }
+    ],
+    "specialization": ["Cardiology"],
+    "experience": 12,
+    "averageRating": 4.8,
+    "numRating": 160,
+    "location": {
+      "type": "Point",
+      "coordinates": [90.24, 24.74],
+      "city": "Mymensingh",
+      "address": "456 Durgabari, Mymensingh"
+    },
+    "visitingSchedule": [
+      { "day": "tuesday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "friday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1500
+  },
+  {
+    "fullName": "Nasrin Akter",
+    "email": "nasrin.akter@example.com",
+    "phone": "+8801719012346",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/nasrin_akter.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [{ "degree": "MBBS", "institute": "Dhaka Medical College" }],
+    "specialization": ["Dermatology"],
+    "experience": 6,
+    "averageRating": 4.6,
+    "numRating": 80,
+    "location": {
+      "type": "Point",
+      "coordinates": [90.42, 23.73],
+      "city": "Dhaka",
+      "address": "789 Banani, Dhaka"
+    },
+    "visitingSchedule": [
+      { "day": "sunday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "wednesday", "hours": { "from": "14:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 25,
+    "consultationFees": 1100
+  },
+  {
+    "fullName": "Sohel Rana",
+    "email": "sohel.rana@example.com",
+    "phone": "+8801810123456",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/sohel_rana.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Chittagong Medical College" },
+      { "degree": "FCPS", "institute": "BCPS" }
+    ],
+    "specialization": ["Orthopedics"],
+    "experience": 9,
+    "averageRating": 4.7,
+    "numRating": 120,
+    "location": {
+      "type": "Point",
+      "coordinates": [91.83, 22.36],
+      "city": "Chittagong",
+      "address": "101 Halishahar, Chittagong"
+    },
+    "visitingSchedule": [
+      { "day": "monday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "thursday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1300
+  },
+  {
+    "fullName": "Jannatul Ferdous",
+    "email": "jannatul.ferdous@example.com",
+    "phone": "+8801910123456",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/jannatul_ferdous.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Rajshahi Medical College" }
+    ],
+    "specialization": ["Endocrinology"],
+    "experience": 5,
+    "averageRating": 4.5,
+    "numRating": 65,
+    "location": {
+      "type": "Point",
+      "coordinates": [88.61, 24.36],
+      "city": "Rajshahi",
+      "address": "321 Uposhohor, Rajshahi"
+    },
+    "visitingSchedule": [
+      { "day": "tuesday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "friday", "hours": { "from": "14:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 25,
+    "consultationFees": 1000
+  },
+  {
+    "fullName": "Masud Rana",
+    "email": "masud.rana@example.com",
+    "phone": "+8801710123457",
+    "gender": "male",
+    "profilePhoto": "https://example.com/photos/masud_rana.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [
+      { "degree": "MBBS", "institute": "Sylhet MAG Osmani Medical College" },
+      { "degree": "MD", "institute": "BSMMU" }
+    ],
+    "specialization": ["Gastroenterology"],
+    "experience": 10,
+    "averageRating": 4.8,
+    "numRating": 140,
+    "location": {
+      "type": "Point",
+      "coordinates": [91.87, 24.89],
+      "city": "Sylhet",
+      "address": "456 Subidbazar, Sylhet"
+    },
+    "visitingSchedule": [
+      { "day": "sunday", "hours": { "from": "10:00", "to": "14:00" } },
+      { "day": "wednesday", "hours": { "from": "15:00", "to": "19:00" } }
+    ],
+    "appointmentDuration": 30,
+    "consultationFees": 1400
+  },
+  {
+    "fullName": "Ruma Akter",
+    "email": "ruma.akter@example.com",
+    "phone": "+8801811234567",
+    "gender": "female",
+    "profilePhoto": "https://example.com/photos/ruma_akter.jpg",
+    "password": "pass1234",
+    "passwordConfirm": "pass1234",
+    "education": [{ "degree": "MBBS", "institute": "Khulna Medical College" }],
+    "specialization": ["Ophthalmology"],
+    "experience": 6,
+    "averageRating": 4.6,
+    "numRating": 90,
+    "location": {
+      "type": "Point",
+      "coordinates": [89.56, 22.86],
+      "city": "Khulna",
+      "address": "789 Sonadanga, Khulna"
+    },
+    "visitingSchedule": [
+      { "day": "monday", "hours": { "from": "09:00", "to": "13:00" } },
+      { "day": "thursday", "hours": { "from": "14:00", "to": "18:00" } }
+    ],
+    "appointmentDuration": 25,
+    "consultationFees": 1100
+  }
+]
