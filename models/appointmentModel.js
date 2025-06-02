@@ -63,6 +63,10 @@ const appointmentSchema = new mongoose.Schema(
       enum: ['card', 'cash', 'unknown'],
     },
     paymentIntent: String,
+    isPrescribed: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

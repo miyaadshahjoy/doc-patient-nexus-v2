@@ -1,8 +1,12 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const catchAsync = require('../utils/catchAsync');
-const verifyAccountEligibility = require('../utils/verifyAccountEligibility');
+///////////////////////////////////////////////
+const Admin = require('../models/adminModel');
+const Doctor = require('../models/doctorModel');
+const Patient = require('../models/patientModel');
 
+const verifyAccountEligibility = require('../utils/verifyAccountEligibility');
+const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 
@@ -101,8 +105,31 @@ exports.signin = (Model) =>
   });
 
 // Authentication
-exports.protect = (Model) =>
+exports.protect = (modelName) =>
   catchAsync(async (req, res, next) => {
+    if (!modelName)
+      return next(
+        new AppError('Model name is required for authenticaiton', 400),
+      );
+
+    // Dynamically import the model based on modelName
+    let Model;
+    switch (modelName) {
+      case 'admin':
+        Model = Admin;
+        break;
+      case 'doctor':
+        Model = Doctor;
+        break;
+      case 'patient':
+        Model = Patient;
+        break;
+      default:
+        return next(
+          new AppError('Invalid model name provided for authentication.', 400),
+        );
+    }
+
     // 1) Getting token and check if its there
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer'))

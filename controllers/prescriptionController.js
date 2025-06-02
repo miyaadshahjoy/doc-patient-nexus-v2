@@ -5,12 +5,17 @@ const AppError = require('../utils/appError');
 
 exports.createPrescription = catchAsync(async (req, res, next) => {
   const appointmentId = req.params.id;
+
   if (!appointmentId)
     return next(new AppError(' Appointment ID is required.', 400));
   const appointment = await Appointment.findById(appointmentId);
   if (!appointment)
     return next(
       new AppError('No appointment found with the provided ID.', 404),
+    );
+  if (appointment.isPrescribed)
+    return next(
+      new AppError('Prescription already exists for this appointment.', 400),
     );
 
   req.body.doctor = appointment.doctor;

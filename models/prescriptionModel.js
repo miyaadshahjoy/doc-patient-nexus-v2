@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const medicationSchema = mongoose.Schema({
+const medicationSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,

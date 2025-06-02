@@ -3,22 +3,21 @@ const doctorController = require('../controllers/doctorController');
 const authController = require('../controllers/authController');
 const currentUserController = require('../controllers/currentUserController');
 const appointmentController = require('../controllers/appointmentController');
-// const handlerFactory = require('../controllers/handlerFactory');
-const prescriptionController = require('../controllers/prescriptionController');
+const appointmentRouter = require('./appointmentRoutes');
+const patientRecordRouter = require('./patientRecordRoutes');
+
 const {
   checkAccountEligibility,
 } = require('../middlewares/verifyAccountStatus');
 const Doctor = require('../models/doctorModel');
-const Patient = require('../models/patientModel');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
-// TODO: might change the route in the future
-router.post(
-  '/appointments/:id/prescription',
-  authController.protect(Doctor),
-  prescriptionController.createPrescription, // Impl: Create prescription for an appointment
-);
+// POST /doctors/patients/{patientId}/patient-records
+router.use('/patients/:id/records', patientRecordRouter);
+
+// doctors/appointments/:id/prescription
+router.use('/appointments', appointmentRouter);
 
 router.get(
   '/doctors-within/:distance/center/:latlng/unit/:unit',
@@ -27,12 +26,12 @@ router.get(
 
 router.post(
   '/:id/available-visiting-hours',
-  authController.protect(Patient),
+  authController.protect('patient'),
   appointmentController.checkVisitingHours,
 );
 router.post(
   '/:id/book-appointment',
-  authController.protect(Patient),
+  authController.protect('patient'),
   appointmentController.bookAppointment,
 );
 
@@ -66,18 +65,18 @@ router.patch('/email-verification/:token', authController.verifyEmail(Doctor));
 router.use(checkAccountEligibility(Doctor));
 router.patch(
   '/me/password',
-  authController.protect(Doctor),
+  authController.protect('doctor'),
   currentUserController.updatePassword(Doctor),
 );
 router.patch(
   '/me',
-  authController.protect(Doctor),
+  authController.protect('doctor'),
   currentUserController.updateCurrentUser(Doctor),
 );
 
 router.delete(
   '/me',
-  authController.protect(Doctor),
+  authController.protect('doctor'),
   currentUserController.deleteCurrentUser(Doctor),
 );
 

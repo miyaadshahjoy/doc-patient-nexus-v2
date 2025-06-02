@@ -46,6 +46,8 @@ exports.bookAppointment = catchAsync(async (req, res, next) => {
   req.body.patient = patient._id;
 
   const date = req.body.appointmentDate;
+  if (!date)
+    return next(new AppError('Please provide an appointment date', 400));
 
   const availableSlots = await getAvailableSlots(doctor, date);
 

@@ -10,7 +10,7 @@ const router = express.Router();
 router.post('/signin', authController.signin(Admin));
 router.patch(
   '/approve-admins/:id',
-  authController.protect(Admin),
+  authController.protect('admin'),
   superAdminOnly,
   handlerFactory.verifyAccount(Admin),
 );
