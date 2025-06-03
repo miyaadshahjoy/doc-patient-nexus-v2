@@ -1,62 +1,5 @@
 [
   {
-    "fullName": "Sayedul Islam",
-    "email": "sayedul.islam@example.com",
-    "phone": "+8801713456789",
-    "gender": "male",
-    "profilePhoto": "https://example.com/photos/sayedul_islam.jpg",
-    "password": "pass1234",
-    "passwordConfirm": "pass1234",
-    "education": [
-      { "degree": "MBBS", "institute": "Chittagong Medical College" },
-      { "degree": "MD", "institute": "BSMMU" }
-    ],
-    "specialization": ["Neurology"],
-    "experience": 10,
-    "averageRating": 4.8,
-    "numRating": 150,
-    "location": {
-      "type": "Point",
-      "coordinates": [91.834, 22.3569],
-      "city": "Chittagong",
-      "address": "456 Zakir Hossain Road, Khulshi"
-    },
-    "visitingSchedule": [
-      { "day": "sunday", "hours": { "from": "10:00", "to": "14:00" } },
-      { "day": "tuesday", "hours": { "from": "15:00", "to": "19:00" } }
-    ],
-    "appointmentDuration": 30,
-    "consultationFees": 1200
-  },
-  {
-    "fullName": "Nusrat Jahan",
-    "email": "nusrat.jahan@example.com",
-    "phone": "+8801814567890",
-    "gender": "female",
-    "profilePhoto": "https://example.com/photos/nusrat_jahan.jpg",
-    "password": "pass1234",
-    "passwordConfirm": "pass1234",
-    "education": [
-      { "degree": "MBBS", "institute": "Rajshahi Medical College" }
-    ],
-    "specialization": ["Pediatrics"],
-    "experience": 6,
-    "averageRating": 4.6,
-    "numRating": 80,
-    "location": {
-      "type": "Point",
-      "coordinates": [88.6241, 24.3636],
-      "city": "Rajshahi",
-      "address": "789 Kumarpara, Rajshahi"
-    },
-    "visitingSchedule": [
-      { "day": "monday", "hours": { "from": "08:00", "to": "12:00" } },
-      { "day": "thursday", "hours": { "from": "14:00", "to": "17:00" } }
-    ],
-    "appointmentDuration": 20,
-    "consultationFees": 1000
-  },
-  {
     "fullName": "Kamrul Hasan",
     "email": "kamrul.hasan@example.com",
     "phone": "+8801912345678",
@@ -70,8 +13,6 @@
     ],
     "specialization": ["Orthopedics"],
     "experience": 12,
-    "averageRating": 4.9,
-    "numRating": 200,
     "location": {
       "type": "Point",
       "coordinates": [91.869, 24.8918],
@@ -96,8 +37,6 @@
     "education": [{ "degree": "MBBS", "institute": "Dhaka Medical College" }],
     "specialization": ["Gynecology"],
     "experience": 7,
-    "averageRating": 4.5,
-    "numRating": 90,
     "location": {
       "type": "Point",
       "coordinates": [90.4074, 23.7104],
@@ -125,8 +64,6 @@
     ],
     "specialization": ["Dermatology"],
     "experience": 9,
-    "averageRating": 4.7,
-    "numRating": 110,
     "location": {
       "type": "Point",
       "coordinates": [89.5403, 22.8456],
@@ -153,8 +90,6 @@
     ],
     "specialization": ["Endocrinology"],
     "experience": 5,
-    "averageRating": 4.4,
-    "numRating": 60,
     "location": {
       "type": "Point",
       "coordinates": [90.25, 24.75],
@@ -182,8 +117,6 @@
     ],
     "specialization": ["Gastroenterology"],
     "experience": 11,
-    "averageRating": 4.8,
-    "numRating": 140,
     "location": {
       "type": "Point",
       "coordinates": [90.3667, 22.701],
@@ -208,8 +141,6 @@
     "education": [{ "degree": "MBBS", "institute": "Rangpur Medical College" }],
     "specialization": ["Ophthalmology"],
     "experience": 6,
-    "averageRating": 4.6,
-    "numRating": 85,
     "location": {
       "type": "Point",
       "coordinates": [89.25, 25.75],
@@ -237,8 +168,6 @@
     ],
     "specialization": ["Urology"],
     "experience": 10,
-    "averageRating": 4.7,
-    "numRating": 130,
     "location": {
       "type": "Point",
       "coordinates": [90.4011, 23.72],
@@ -265,8 +194,6 @@
     ],
     "specialization": ["ENT"],
     "experience": 5,
-    "averageRating": 4.5,
-    "numRating": 70,
     "location": {
       "type": "Point",
       "coordinates": [91.82, 22.35],
@@ -294,8 +221,6 @@
     ],
     "specialization": ["Cardiology", "Internal Medicine"],
     "experience": 15,
-    "averageRating": 4.9,
-    "numRating": 180,
     "location": {
       "type": "Point",
       "coordinates": [88.6, 24.37],
@@ -322,8 +247,6 @@
     ],
     "specialization": ["Pediatrics"],
     "experience": 4,
-    "averageRating": 4.4,
-    "numRating": 50,
     "location": {
       "type": "Point",
       "coordinates": [91.86, 24.9],
@@ -351,8 +274,6 @@
     ],
     "specialization": ["Neurology"],
     "experience": 8,
-    "averageRating": 4.6,
-    "numRating": 100,
     "location": {
       "type": "Point",
       "coordinates": [89.55, 22.85],
@@ -377,8 +298,6 @@
     "education": [{ "degree": "MBBS", "institute": "Barisal Medical College" }],
     "specialization": ["Gynecology"],
     "experience": 7,
-    "averageRating": 4.5,
-    "numRating": 95,
     "location": {
       "type": "Point",
       "coordinates": [90.35, 22.7],
@@ -406,8 +325,6 @@
     ],
     "specialization": ["Cardiology"],
     "experience": 12,
-    "averageRating": 4.8,
-    "numRating": 160,
     "location": {
       "type": "Point",
       "coordinates": [90.24, 24.74],
@@ -432,8 +349,6 @@
     "education": [{ "degree": "MBBS", "institute": "Dhaka Medical College" }],
     "specialization": ["Dermatology"],
     "experience": 6,
-    "averageRating": 4.6,
-    "numRating": 80,
     "location": {
       "type": "Point",
       "coordinates": [90.42, 23.73],
@@ -461,8 +376,6 @@
     ],
     "specialization": ["Orthopedics"],
     "experience": 9,
-    "averageRating": 4.7,
-    "numRating": 120,
     "location": {
       "type": "Point",
       "coordinates": [91.83, 22.36],
@@ -489,8 +402,6 @@
     ],
     "specialization": ["Endocrinology"],
     "experience": 5,
-    "averageRating": 4.5,
-    "numRating": 65,
     "location": {
       "type": "Point",
       "coordinates": [88.61, 24.36],
@@ -518,8 +429,6 @@
     ],
     "specialization": ["Gastroenterology"],
     "experience": 10,
-    "averageRating": 4.8,
-    "numRating": 140,
     "location": {
       "type": "Point",
       "coordinates": [91.87, 24.89],
@@ -544,8 +453,6 @@
     "education": [{ "degree": "MBBS", "institute": "Khulna Medical College" }],
     "specialization": ["Ophthalmology"],
     "experience": 6,
-    "averageRating": 4.6,
-    "numRating": 90,
     "location": {
       "type": "Point",
       "coordinates": [89.56, 22.86],
