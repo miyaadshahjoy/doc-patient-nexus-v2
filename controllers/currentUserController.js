@@ -55,6 +55,7 @@ exports.updateCurrentUser = (Model) =>
       );
     // 2) Fields that should Not be updated by user
     const forbiddenFields = [
+      'gender',
       'specialization',
       'experience',
       'education',
@@ -64,6 +65,7 @@ exports.updateCurrentUser = (Model) =>
       'role',
     ];
     // 3) Filter out forbidden fields from req.body
+    // TODO: Make this more efficient
     const filteredBody = {};
     Object.keys(req.body).forEach((key) => {
       if (!forbiddenFields.includes(key)) {
@@ -81,13 +83,14 @@ exports.updateCurrentUser = (Model) =>
       },
     );
     if (!updatedUser)
-      return next(new AppError('No user exists with this ID', 404));
+      return next(new AppError('No user found with this ID.', 404));
 
+    const resourceName = Model.modelName;
     res.status(200).json({
       status: 'success',
       message: 'User account updated successfully',
       data: {
-        user: updatedUser,
+        [resourceName]: updatedUser,
       },
     });
   });

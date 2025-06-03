@@ -35,17 +35,6 @@ router.post(
   appointmentController.bookAppointment,
 );
 
-router
-  .route('/')
-  .get(doctorController.getDoctors) // Impl: Get all doctors document
-  .post(doctorController.createDoctor); // Impl: Create doctor
-
-router
-  .route('/:id')
-  .get(doctorController.getDoctor) // Impl: Get doctor by Id
-  .patch(doctorController.updateDoctor) // Impl: Update doctor
-  .delete(doctorController.deleteDoctor); // Impl: Delete doctor
-
 router.post('/forgot-password', authController.forgotPassword(Doctor));
 router.post(
   '/reset-password/:resetToken',
@@ -62,22 +51,37 @@ router.post(
 
 router.patch('/email-verification/:token', authController.verifyEmail(Doctor));
 
-router.use(checkAccountEligibility(Doctor));
+//
+
 router.patch(
   '/me/password',
   authController.protect('doctor'),
+  checkAccountEligibility(Doctor),
   currentUserController.updatePassword(Doctor),
 );
 router.patch(
   '/me',
   authController.protect('doctor'),
+  checkAccountEligibility(Doctor),
   currentUserController.updateCurrentUser(Doctor),
 );
 
 router.delete(
   '/me',
   authController.protect('doctor'),
+  checkAccountEligibility(Doctor),
   currentUserController.deleteCurrentUser(Doctor),
 );
+
+router
+  .route('/')
+  .get(doctorController.getDoctors) // Impl: Get all doctors document
+  .post(doctorController.createDoctor); // Impl: Create doctor
+
+router
+  .route('/:id')
+  .get(doctorController.getDoctor) // Impl: Get doctor by Id
+  .patch(doctorController.updateDoctor) // Impl: Update doctor
+  .delete(doctorController.deleteDoctor); // Impl: Delete doctor
 
 module.exports = router;

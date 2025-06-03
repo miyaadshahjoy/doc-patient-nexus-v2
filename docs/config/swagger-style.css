@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@font-face {
+  font-family: 'Operator Mono';
+  src: url(`${__dirname}/public/assets/fonts/operator-mono-bold.woff2`)
+    format('woff2');
+  font-display: swap;
+}
+
+.swagger-ui .opblock-body pre.microlight {
+  background-color: #1e1e2e !important;
+}
+.swagger-ui p,
+.swagger-ui h1,
+.swagger-ui h2,
+.swagger-ui h3,
+.swagger-ui h4,
+.swagger-ui ul li,
+.swagger-ui th,
+.swagger-ui a {
+  font-family: 'Poppins', sans-serif !important;
+}
+.swagger-ui td,
+.swagger-ui p {
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.swagger-ui pre,
+.swagger-ui code,
+.swagger-ui tr,
+.swagger-ui td,
+.swagger-ui span,
+.swagger-ui textarea {
+  font-family: 'Operator Mono', monospace !important;
+}
+.swagger-ui pre,
+.swagger-ui code {
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+}
+.swagger-ui button,
+.swagger-ui .btn,
+.swagger-ui .opblock .opblock-summary-method {
+  font-family: 'Poppins', arial-sans !important;
+  font-size: 1.125rem !important;
+  font-weight: 400 !important;
+  letter-spacing: 1px !important;
+  padding: 7px 13.5px;
+}
+
+.swagger-ui .topbar {
+  display: none !important;
+}
+.swagger-ui b,
+.swagger-ui strong {
+  font-size: 1.25rem !important;
+}
+.swagger-ui .opblock .opblock-section-header h4,
+.swagger-ui th {
+  font-size: 1rem !important;
+}
+.swagger-ui .try-out__btn,
+.swagger-ui .execute {
+  color: #ffffff !important;
+  background-color: #f7345e !important;
+  border-color: #f7345e !important;
+  font-size: 1.125rem !important;
+}
