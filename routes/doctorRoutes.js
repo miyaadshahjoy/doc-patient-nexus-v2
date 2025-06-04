@@ -81,7 +81,17 @@ router
 router
   .route('/:id')
   .get(doctorController.getDoctor) // Impl: Get doctor by Id
-  .patch(doctorController.updateDoctor) // Impl: Update doctor
-  .delete(doctorController.deleteDoctor); // Impl: Delete doctor
+  .patch(
+    authController.protect(),
+    checkAccountEligibility(),
+    authController.restrictTo('admin', 'super-admin'),
+    doctorController.updateDoctor,
+  ) // Impl: Update doctor
+  .delete(
+    authController.protect(),
+    checkAccountEligibility(),
+    authController.restrictTo('admin', 'super-admin'),
+    doctorController.deleteDoctor,
+  ); // Impl: Delete doctor
 
 module.exports = router;

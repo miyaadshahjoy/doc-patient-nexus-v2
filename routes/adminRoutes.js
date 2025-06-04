@@ -21,26 +21,34 @@ router.post('/signin', authController.signin(Admin));
 
 router.post('/email-verification', authController.sendEmailVerification(Admin));
 
-router.patch(
-  '/email-verification/:token',
-
-  authController.verifyEmail(Admin),
-);
+router.patch('/email-verification/:token', authController.verifyEmail(Admin));
 // router.use(checkAccountEligibility(Admin));
+// Current User Routes
+// Get Current User
+router.get(
+  '/me',
+  authController.protect('admin'),
+  checkAccountEligibility(Admin),
+  currentUserController.updatePassword(Admin),
+);
+
 router.patch(
   '/me/password',
   authController.protect('admin'),
+  checkAccountEligibility(Admin),
   currentUserController.updatePassword(Admin),
 );
 router.patch(
   '/me',
   authController.protect('admin'),
+  checkAccountEligibility(Admin),
   currentUserController.updateCurrentUser(Admin),
 );
 
 router.delete(
   '/me',
   authController.protect('admin'),
+  checkAccountEligibility(Admin),
   currentUserController.deleteCurrentUser(Admin),
 );
 

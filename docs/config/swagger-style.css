@@ -6,6 +6,11 @@
     format('woff2');
   font-display: swap;
 }
+/* hide the top bar and add custom header  */
+
+.swagger-ui .topbar {
+  display: none !important;
+}
 
 .swagger-ui .opblock-body pre.microlight {
   background-color: #1e1e2e !important;
@@ -50,9 +55,6 @@
   padding: 7px 13.5px;
 }
 
-.swagger-ui .topbar {
-  display: none !important;
-}
 .swagger-ui b,
 .swagger-ui strong {
   font-size: 1.25rem !important;

@@ -278,6 +278,177 @@ module.exports = {
       },
     },
   },
+  Patient: {
+    type: 'object',
+    required: [
+      'fullName',
+      'email',
+      'phone',
+      'gender',
+      'password',
+      'passwordConfirm',
+      'bloodGroup',
+      'dateOfBirth',
+      'location',
+    ],
+    /*
+    const testPatient = {
+  fullName: "Sadia Rahman",
+  email: "sadia.rahman@example.com",
+  phone: "+8801712345678",
+  gender: "female",
+  profilePhoto: "https://example.com/sadia-profile.jpg",
+  password: "securePass789",
+  passwordConfirm: "securePass789",
+  bloodGroup: "B+",
+  dateOfBirth: new Date("1992-03-10"),
+  medicalHistory: ["Thyroid Disorder", "Anemia"],
+  allergies: ["Shellfish", "Pollen"],
+  currentMedications: ["Levothyroxine", "Iron Supplements"],
+  location: {
+    type: "Point",
+    coordinates: [90.412518, 23.810332],
+    city: "Dhaka",
+    address: "House 12, Road 5, Dhanmondi, Dhaka 1205"
+  },
+  status: "pending",
+  role: "patient",
+  isVerified: false,
+  emailVerified: false
+};
+    
+    */
+
+    properties: {
+      _id: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd7',
+      },
+      fullName: {
+        type: 'string',
+        example: 'Sadia Rahman',
+      },
+      email: {
+        type: 'string',
+        example: 'sadia.rahman@example.com',
+      },
+      phone: {
+        type: 'string',
+        example: '+8801712345679',
+      },
+      gender: {
+        type: 'string',
+        enum: ['male', 'female', 'others', 'prefer not to say'],
+        example: 'female',
+      },
+      profilePhoto: {
+        type: 'string',
+        example: 'https://example.com/sadia-profile.jpg',
+      },
+      password: {
+        type: 'string',
+        format: 'password',
+        example: 'pass1234',
+      },
+
+      passwordConfirm: {
+        type: 'string',
+        format: 'password',
+        example: 'pass1234',
+      },
+      bloodGroup: {
+        type: 'string',
+        enum: ['A+', 'B+', 'O+', 'A-', 'B-', 'O-', 'AB+', 'AB-'],
+        example: 'B+',
+      },
+      dateOfBirth: {
+        type: 'string',
+        format: 'date',
+        example: '1992-03-10',
+      },
+      medicalHistory: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        example: ['Thyroid Disorder', 'Anemia'],
+      },
+      allergies: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        example: ['Shellfish', 'Pollen'],
+      },
+      currentMedications: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        example: ['Levothyroxine', 'Iron Supplements'],
+      },
+      location: {
+        type: 'object',
+        required: ['type', 'coordinates', 'city', 'address'],
+        properties: {
+          type: {
+            type: 'string',
+            enum: ['Point'],
+            example: 'Point',
+          },
+          coordinates: {
+            type: 'array',
+            items: {
+              type: 'number',
+            },
+            example: [90.412518, 23.810332],
+          },
+          city: {
+            type: 'string',
+            example: 'Dhaka',
+          },
+          address: {
+            type: 'string',
+            example: 'House 12, Road 5, Dhanmondi, Dhaka 1205',
+          },
+        },
+      },
+      status: {
+        type: 'string',
+        enum: ['active', 'pending', 'removed'],
+        example: 'pending',
+      },
+      role: {
+        type: 'string',
+        enum: ['patient'],
+        example: 'patient',
+      },
+      isVerified: {
+        type: 'boolean',
+        example: false,
+      },
+      emailVerified: {
+        type: 'boolean',
+        example: false,
+      },
+      createdAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-16T18:46:09.776Z',
+      },
+      updatedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-31T02:45:43.207Z',
+      },
+      passwordChangedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-16T18:46:08.776Z',
+      },
+    },
+  },
+
   Medication: {
     type: 'object',
     required: ['name', 'dosage', 'frequency', 'duration'],

@@ -5,6 +5,28 @@ const catchAsync = require('../utils/catchAsync');
 const generateJWT = (id, role) =>
   jwt.sign({ id, role }, process.env.JWT_SECRET_KEY);
 
+exports.getCurrentUser = (Model) =>
+  catchAsync(async (req, res, next) => {
+    // 1) Get logged in user id
+    const userId = req.uer._id;
+    if (!userId) return next(new AppError('No user found.', 404));
+    // 2) Get user from the collection
+    const user = await Model.findById(userId);
+    if (!user)
+      return next(new AppError('This user does not exist anymore', 400));
+    if (user.status === 'removed')
+      return next(new AppError('This user account has been deleted', 400));
+    // 3) Send response
+    const resourceName = Model.modelName;
+    res.status(200).json({
+      status: 'success',
+      message: `${resourceName} account fetched successfully.`,
+      [resourceName]: {
+        user,
+      },
+    });
+  });
+
 exports.updatePassword = (Model) =>
   catchAsync(async (req, res, next) => {
     const { currentPassword, password, passwordConfirm } = req.body;
@@ -101,9 +123,10 @@ exports.deleteCurrentUser = (Model) =>
     if (!user) return next(new AppError('User does not exist', 400));
     user.status = 'removed';
     await user.save();
+    const resourceName = Model.modelName;
     res.status(204).json({
       status: 'success',
-      message: 'Your account deleted successfully',
+      message: ` ${resourceName} account deleted successfully.`,
       data: null,
     });
   });

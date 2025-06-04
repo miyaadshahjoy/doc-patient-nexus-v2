@@ -5,7 +5,7 @@ module.exports = {
     '/api/v2/doctors': {
       get: {
         tags: ['Doctors'],
-        summary: 'Get all doctors',
+        summary: 'Get all doctors.',
         description: 'Retrieve a list of all registered doctors',
         operationId: 'getDoctors',
 
@@ -264,6 +264,417 @@ module.exports = {
           },
           404: {
             description: 'No doctor found with the provided ID.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'No doctor found with the provided ID. Please check the ID and try again.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+
+      patch: {
+        tags: ['Doctors'],
+        summary: 'Update a Doctor by ID',
+        description:
+          '**Update a specific Doctor by their `ID`. This endpoint is accessible to `logged-in` Admins only.**',
+        operationId: 'updateDoctorById',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            description: 'ID of the Doctor to update',
+            schema: {
+              type: 'string',
+              example: '60c72b2f9b1e8b001c8e4d3a',
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  fullName: {
+                    type: 'string',
+                    example: 'Zarif Hossain',
+                  },
+                  email: {
+                    type: 'string',
+                    format: 'email',
+                    example: 'zarif.hossain@example.com',
+                  },
+                  phone: {
+                    type: 'string',
+                    example: '+880 1720 111234',
+                  },
+                  gender: {
+                    type: 'string',
+                    enum: ['male', 'female', 'others', 'prefer not to say'],
+                  },
+                  profilePhoto: {
+                    type: 'string',
+                    example: 'https://cdn.example.com/images/zarif.jpg',
+                  },
+                  password: {
+                    type: 'string',
+                    format: 'password',
+                    example: 'pass1234',
+                  },
+                  passwordConfirm: {
+                    type: 'string',
+                    format: 'password',
+                    example: 'pass1234',
+                  },
+                  education: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      required: ['degree', 'institute'],
+                      properties: {
+                        degree: {
+                          type: 'string',
+                          example: 'MBBS',
+                        },
+                        institute: {
+                          type: 'string',
+                          example: 'Dhaka Medical College',
+                        },
+                      },
+                    },
+                  },
+                  specialization: {
+                    type: 'array',
+                    items: {
+                      type: 'string',
+                    },
+                    example: ['Cardiology', 'Internal Medicine'],
+                  },
+                  experience: {
+                    type: 'number',
+                    example: 10,
+                  },
+                  averageRating: {
+                    type: 'number',
+                    example: 4.5,
+                  },
+                  location: {
+                    type: 'object',
+                    required: ['type', 'coordinates'],
+                    properties: {
+                      type: {
+                        type: 'string',
+                        enum: ['Point'],
+                        example: 'Point',
+                      },
+                      coordinates: {
+                        type: 'array',
+                        items: {
+                          type: 'number',
+                        },
+                        example: [90.389, 23.746],
+                      },
+                      city: {
+                        type: 'string',
+                        example: 'Dhaka',
+                      },
+                      address: {
+                        type: 'string',
+                        example: 'Green Road, Dhaka',
+                      },
+                    },
+                  },
+                  visitingSchedule: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        day: {
+                          type: 'string',
+                          enum: [
+                            'saturday',
+                            'sunday',
+                            'monday',
+                            'tuesday',
+                            'wednesday',
+                            'thursday',
+                            'friday',
+                          ],
+                          example: 'monday',
+                        },
+                        hours: {
+                          type: 'object',
+                          required: ['from', 'to'],
+                          properties: {
+                            from: {
+                              type: 'string',
+                              example: '09:00',
+                            },
+                            to: {
+                              type: 'string',
+                              example: '17:00',
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                  appointmentDuration: {
+                    type: 'number',
+                    example: 60, // Duration in minutes
+                  },
+                  consultationFees: {
+                    type: 'number',
+                    example: 1000, // Fees in local currency
+                  },
+                  role: {
+                    type: 'string',
+                    example: 'doctor',
+                  },
+                  status: {
+                    type: 'string',
+                    enum: ['active', 'pending', 'removed'],
+                    example: 'active',
+                  },
+                  isVerified: {
+                    type: 'boolean',
+                    example: true,
+                  },
+                  isEmailVerified: {
+                    type: 'boolean',
+                    example: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Successfully updated the doctor.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        doctor: {
+                          $ref: '#/components/schemas/Doctor',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+
+          400: {
+            description:
+              'Bad request. Possibly due to invalid ID format or missing `ID`.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Invalid ID format or missing ID. Please provide a valid doctor ID.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description:
+              'Unauthorized access. Only logged-in Admins can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You are not authorized to access this resource. Please log in.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Only logged in Admins can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have permission to perform this action.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description:
+              'No doctor found with the provided ID. Please check the ID and try again.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'No doctor found with the provided ID. Please check the ID and try again.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+
+      delete: {
+        tags: ['Doctors'],
+        summary: 'Delete a doctor by ID',
+        description:
+          '**Delete a specific doctor by their `ID`. This endpoint is accessible to `logged-in` Admins only.**',
+        operationId: 'deleteDoctorById',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            description: 'ID of the doctor to delete',
+            schema: {
+              type: 'string',
+              example: '60c72b2f9b1e8b001c8e4d3a',
+            },
+          },
+        ],
+        responses: {
+          204: {
+            description: 'Successfully deleted the doctor.',
+          },
+          400: {
+            description:
+              'Bad request. Possibly due to invalid ID format or missing `ID`.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Invalid ID format or missing ID. Please provide a valid doctor ID.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description:
+              'Unauthorized access. Only logged-in Admins can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You are not authorized to access this resource. Please log in.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Only logged in Admins or Doctors can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have permission to perform this action.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description:
+              'No doctor found with the provided ID. Please check the ID and try again.',
             content: {
               'application/json': {
                 schema: {

@@ -450,6 +450,105 @@ module.exports = {
 
     // Update currently logged in admin's profile
     '/api/v2/admins/me': {
+      get: {
+        tags: ['Admins'],
+        summary: 'Get currently logged in admin profile.',
+        description:
+          '**Fetches the profile information of the currently logged in admin. The admin must be `logged in` and have a valid `JWT` token.**',
+        security: {
+          bearerAuth: [], // This indicates that the endpoint requires authentication
+        },
+        responses: {
+          200: {
+            description: 'Admin profile fetched successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        admin: { $ref: '#/components/schemas/Admin' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description:
+              'Bad request. Possibly due to invalid input or validation errors.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Invalid input. Please provide valid profile information.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description:
+              'Unauthorized access. Admin must be logged in with a valid JWT token.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'You must be logged in to update your profile.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Admin does not have permission to update profile.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have permission to update this profile.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
       patch: {
         tags: ['Admins'],
         summary: 'Update Admin Profile.',
@@ -591,6 +690,64 @@ module.exports = {
           500: responses.InternalServerError,
         },
       },
+      delete: {
+        tags: ['Admins'],
+        summary: 'Delete Admin Account.',
+        security: {
+          bearerAuth: [], // This indicates that the endpoint requires authentication
+        },
+        description:
+          '**Allows an admin to delete their own account. The admin must be `logged in` with a valid `JWT` token.**',
+        responses: {
+          204: {
+            description: 'Admin account deleted successfully.',
+          },
+          401: {
+            description:
+              'Unauthorized access. Admin must be logged in with a valid `JWT` token.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'You must be logged in to delete your account.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Admin does not have permission to delete this account.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have permission to delete this account.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
     },
     // how to make this route protected in docs
 
@@ -716,6 +873,141 @@ module.exports = {
                     message: {
                       type: 'string',
                       example: 'No doctor found with the provided ID.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+    },
+
+    // Approve patient account
+
+    '/api/v2/admins/approve-patients/{patientId}': {
+      patch: {
+        tags: ['Admins'],
+        summary: 'Approve patient account.',
+        security: {
+          bearerAuth: [], // This indicates that the endpoint requires authentication
+        },
+        description:
+          '**Allows an admin with an active and verified account to approve a patient account by ID. The patient must be in a pending state. Requires a valid `JWT` token with admin privileges.**',
+        parameters: [
+          {
+            name: 'patientId',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'string',
+              example: '60c72b2f9b1e8b001c8e4f3a',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Patient account approved successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        patient: { $ref: '#/components/schemas/Patient' },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description:
+              'Patient account is already approved or does not exist.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Patient account is already approved or does not exist.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description: 'Unauthorized access.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Please verify your email before accessing the system',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description: 'Forbidden access due to account status.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have permission to approve patient accounts.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          // TODO: Should we add a 404 response here? may be not needed
+          404: {
+            description: 'Patient account not found.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'No patient found with the provided ID.',
                     },
                   },
                 },

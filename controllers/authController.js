@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 ///////////////////////////////////////////////
-const Admin = require('../models/adminModel');
-const Doctor = require('../models/doctorModel');
-const Patient = require('../models/patientModel');
+const getModel = require('../utils/getModel');
 
 const verifyAccountEligibility = require('../utils/verifyAccountEligibility');
 const catchAsync = require('../utils/catchAsync');
@@ -105,31 +103,8 @@ exports.signin = (Model) =>
   });
 
 // Authentication
-exports.protect = (modelName) =>
+exports.protect = () =>
   catchAsync(async (req, res, next) => {
-    if (!modelName)
-      return next(
-        new AppError('Model name is required for authenticaiton', 400),
-      );
-
-    // Dynamically import the model based on modelName
-    let Model;
-    switch (modelName) {
-      case 'admin':
-        Model = Admin;
-        break;
-      case 'doctor':
-        Model = Doctor;
-        break;
-      case 'patient':
-        Model = Patient;
-        break;
-      default:
-        return next(
-          new AppError('Invalid model name provided for authentication.', 400),
-        );
-    }
-
     // 1) Getting token and check if its there
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer'))
@@ -146,17 +121,23 @@ exports.protect = (modelName) =>
       return next(new AppError('Invalid or expired token.', 401));
     }
 
-    if (decoded.role !== Model.modelName.toLowerCase())
-      return next(
-        new AppError('You do not have permission to perform this action', 403),
-      );
+    if (!decoded) return next(new AppError('Invalid token payload.', 401));
+    if (!decoded.role)
+      return next(new AppError('Role is missing in token payload.', 401));
+
+    // Dynamically import the model based on user role
+    // This assumes that the role is one of 'admin', 'doctor', or 'patient'
+    const Model = getModel(decoded.role);
 
     // 3) Check if user still exists
     const user = await Model.findById(decoded.id);
 
     if (!user)
       return next(
-        new AppError('The user associated with this token no longer exists'),
+        new AppError(
+          'The user associated with this token no longer exists',
+          404,
+        ),
       );
     // 4) Check if user changed password after the token was issued
     if (user.passwordChangedAfter(decoded.iat))

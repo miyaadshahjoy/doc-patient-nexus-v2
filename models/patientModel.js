@@ -130,7 +130,7 @@ const patientSchema = new mongoose.Schema(
     emailVerified: {
       type: Boolean,
       default: false,
-    }, ///////////////////////////////////////////
+    }, //////////////////////////////////////////
     passwordChangedAt: {
       type: Date,
     },

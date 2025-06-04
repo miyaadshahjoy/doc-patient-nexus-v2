@@ -70,32 +70,42 @@ exports.readOne = (Model) =>
 
 exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (!req.params.id)
+      return next(
+        new AppError('No ID provided for the update operation.', 400),
+      );
     const { id } = req.params;
     const updatedDoc = await Model.findByIdAndUpdate(id, req.body, {
       runValidators: true,
       new: true,
     });
+    const resourceName = `${Model.modelName}`;
     if (!updatedDoc) {
       return next(
-        new AppError(`No ${Model.modelName} found with the provided Id.`, 404),
+        new AppError(`No ${resourceName} found with the provided Id.`, 404),
       );
     }
     res.status(200).json({
       status: `success`,
-      message: `${Model.modelName} updated successfully.`,
+      message: `${resourceName} updated successfully.`,
       data: {
-        doc: updatedDoc,
+        [resourceName]: updatedDoc,
       },
     });
   });
 
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (!req.params.id)
+      return next(
+        new AppError('No ID provided for the update operation.', 400),
+      );
     const { id } = req.params;
+    const resourceName = `${Model.modelName}`;
     const deletedDoc = await Model.findByIdAndDelete(id);
     if (!deletedDoc) {
       return next(
-        new AppError(`No ${Model.modelName} found with the provided Id`, 404),
+        new AppError(`No ${resourceName} found with the provided Id`, 404),
       );
     }
 

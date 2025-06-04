@@ -1,5 +1,6 @@
 const express = require('express');
 const authController = require('../controllers/authController');
+const handlerFactory = require('../controllers/handlerFactory');
 const currentUserController = require('../controllers/currentUserController');
 
 const appointmentRouter = require('./appointmentRoutes');
@@ -43,22 +44,59 @@ router.patch(
   authController.verifyEmail(Patient),
 );
 
-router.use(checkAccountEligibility(Patient));
+// router.use(checkAccountEligibility(Patient));
 router.patch(
   '/me/password',
-  authController.protect('patient'),
+  authController.protect(),
+  checkAccountEligibility(Patient),
   currentUserController.updatePassword(Patient),
 );
 router.patch(
   '/me',
-  authController.protect('patient'),
+  authController.protect(),
+  checkAccountEligibility(Patient),
+
   currentUserController.updateCurrentUser(Patient),
 );
 
 router.delete(
   '/me',
-  authController.protect('patient'),
+  authController.protect(),
+  checkAccountEligibility(Patient),
+
   currentUserController.deleteCurrentUser(Patient),
 );
+
+// Get all patietns
+// TODO: Add pagination, filtering, sorting and field selection
+router
+  .route('/')
+  .get(
+    authController.protect(),
+    checkAccountEligibility(),
+    authController.restrictTo('admin', 'super-admin', 'doctor'),
+    handlerFactory.readAll(Patient),
+  );
+
+router
+  .route('/:id')
+  .get(
+    authController.protect(),
+    checkAccountEligibility(),
+    authController.restrictTo('admin', 'super-admin', 'doctor'),
+    handlerFactory.readOne(Patient),
+  )
+  .patch(
+    authController.protect(),
+    checkAccountEligibility(),
+    authController.restrictTo('admin', 'super-admin', 'doctor'),
+    handlerFactory.updateOne(Patient),
+  )
+  .delete(
+    authController.protect(),
+    checkAccountEligibility(),
+    authController.restrictTo('admin', 'super-admin', 'doctor'),
+    handlerFactory.deleteOne(Patient),
+  );
 
 module.exports = router;

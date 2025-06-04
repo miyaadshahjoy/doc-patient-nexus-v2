@@ -2,6 +2,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const path = require('path');
 const adminDocs = require('../sources/routes/adminDocs');
 const doctorDocs = require('../sources/routes/doctorDocs');
+const patientDocs = require('../sources/routes/patientDocs');
 const prescriptionDocs = require('../sources/routes/prescriptionDocs');
 
 const options = {
@@ -44,9 +45,9 @@ const options = {
       //   name: 'Super Admins',
       //   description: 'Operations related to super admins',
       // },
-      // { name: 'Admins', description: 'Operations related to admins' },
+      { name: 'Admins', description: 'Operations related to admins' },
       { name: 'Doctors', description: 'Operations related to doctors' },
-      // { name: 'Patients', description: 'Operations related to patients' },
+      { name: 'Patients', description: 'Operations related to patients' },
       // {
       //   name: 'Appointments',
       //   description: 'Operations related to appointments',
@@ -64,6 +65,7 @@ swaggerSpec.paths = {
   ...swaggerSpec.paths,
   ...adminDocs.paths,
   ...doctorDocs.paths,
+  ...patientDocs.paths,
   ...prescriptionDocs.paths, // Merging doctorDocs paths into swaggerSpec
 };
 module.exports = swaggerSpec;

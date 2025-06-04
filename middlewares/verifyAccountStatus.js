@@ -1,8 +1,10 @@
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const getModel = require('../utils/getModel');
 
-exports.checkAccountEligibility = (Model) =>
+exports.checkAccountEligibility = () =>
   catchAsync(async (req, res, next) => {
+    const Model = getModel(req.user.role);
     const user = await Model.findById(req.user._id);
     if (!user) return next(new AppError("User doesn't exist.", 404));
 
