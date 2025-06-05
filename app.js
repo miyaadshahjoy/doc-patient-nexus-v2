@@ -19,8 +19,8 @@ const app = express();
 app.get('/', (req, res) => {
   res.status(200);
   res.json({
-    status: 'success',
-    data: 'DocPatient Nexus',
+    status: 'SUCCESS',
+    message: 'DocPateint Nexus Homepage',
   });
 });
 // Webhook Route

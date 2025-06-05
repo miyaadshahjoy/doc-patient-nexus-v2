@@ -88,26 +88,16 @@ const patientSchema = new mongoose.Schema(
     ],
     location: {
       type: {
-        type: String,
-        default: 'Point',
-        enum: {
-          values: ['Point'],
-          message: 'Location type must be "Point"',
+        city: {
+          type: String,
+          trim: true,
         },
-        required: true,
+        address: {
+          type: String,
+          trim: true,
+        },
       },
-      coordinates: {
-        type: [Number],
-        required: [true, 'Location coordinates are required'],
-      },
-      city: {
-        type: String,
-        trim: true,
-      },
-      address: {
-        type: String,
-        trim: true,
-      },
+      required: [true, 'Location is required.'],
     },
     status: {
       type: String,

@@ -216,7 +216,7 @@ const doctorSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    ///////////////////////////////////////////
+    /////////////////////////////////////////////
     passwordChangedAt: {
       type: Date,
     },
