@@ -16,7 +16,7 @@ const router = express.Router({ mergeParams: true });
 // POST /doctors/patients/{patientId}/patient-records
 router.use('/patients/:id/records', patientRecordRouter);
 
-// doctors/appointments/:id/prescription
+// POST/doctors/appointments/{patientId}/prescription
 router.use('/appointments', appointmentRouter);
 
 router.get(

@@ -7,11 +7,8 @@ const Review = require('../models/reviewModel');
 
 const router = express.Router({ mergeParams: true });
 
-router.post(
-  '/',
-  authController.protect('patient'),
-  reviewController.postReview,
-);
+// POST/patients/appointments/{appointmentId}/reviews
+router.post('/', authController.protect(), reviewController.postReview);
 
 router.get('/', handlerFactory.readAll(Review));
 

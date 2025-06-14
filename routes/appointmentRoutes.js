@@ -7,9 +7,10 @@ const prescriptionRouter = require('./prescriptionRoutes');
 
 const router = express.Router({ mergeParams: true });
 
+// POST/patients/appointments/{appointmentId}/reviews
 router.use('/:id/reviews', reviewRouter);
 
-// doctors/appointments/:id/prescription
+// POST/doctors/appointments/:id/prescription
 router.use('/:id/prescription', prescriptionRouter);
 
 router.get(

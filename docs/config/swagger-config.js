@@ -5,6 +5,7 @@ const adminDocs = require('../sources/routes/adminDocs');
 const doctorDocs = require('../sources/routes/doctorDocs');
 const patientDocs = require('../sources/routes/patientDocs');
 const prescriptionDocs = require('../sources/routes/prescriptionDocs');
+const reviewDocs = require('../sources/routes/reviewDocs');
 const schemas = require('../sources/components/schemas');
 const responses = require('../sources/components/responses');
 
@@ -44,17 +45,34 @@ const options = {
     },
 
     tags: [
-      // {
-      //   name: 'Super Admins',
-      //   description: 'Operations related to super admins',
-      // },
-      { name: 'Admins', description: 'Operations related to admins' },
-      { name: 'Doctors', description: 'Operations related to doctors' },
-      { name: 'Patients', description: 'Operations related to patients' },
-      // {
-      //   name: 'Appointments',
-      //   description: 'Operations related to appointments',
-      // },
+      {
+        name: 'Super-Admins',
+        description: 'Operations related to super admins',
+      },
+      {
+        name: 'Admins',
+        description: 'Operations related to admins',
+      },
+      {
+        name: 'Doctors',
+        description: 'Operations related to doctors',
+      },
+      {
+        name: 'Patients',
+        description: 'Operations related to patients',
+      },
+      {
+        name: 'Appointments',
+        description: 'Operations related to appointments',
+      },
+      {
+        name: 'Prescriptions',
+        description: 'Operations related to prescriptions',
+      },
+      {
+        name: 'Reviews',
+        description: 'Operations related to reviews',
+      },
     ],
   },
   apis: [
@@ -70,6 +88,7 @@ swaggerSpec.paths = {
   ...adminDocs.paths,
   ...doctorDocs.paths,
   ...patientDocs.paths,
-  ...prescriptionDocs.paths, // Merging doctorDocs paths into swaggerSpec
+  ...prescriptionDocs.paths,
+  ...reviewDocs.paths, // Merging doctorDocs paths into swaggerSpec
 };
 module.exports = swaggerSpec;

@@ -5,9 +5,10 @@ const authController = require('../controllers/authController');
 
 const router = express.Router({ mergeParams: true });
 
+// POST/doctors/appointments/{appointmentId}/prescription
 router.post(
   '/',
-  authController.protect('doctor'),
+  authController.protect(),
   prescriptionController.createPrescription,
 );
 

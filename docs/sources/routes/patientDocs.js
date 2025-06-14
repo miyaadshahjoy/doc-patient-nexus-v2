@@ -1579,5 +1579,166 @@ module.exports = {
         },
       },
     },
+    // POST/patients/appointments/{appointmentId}/reviews
+    '/api/v2/patients/appointments/{appointmentId}/reviews': {
+      post: {
+        tags: ['Patients'],
+        summary: 'Post a review for an appointment.',
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
+        description:
+          'Allows a patient to `post a review` for an appointment. The patient must be `logged in` to use this route.',
+        operationId: 'postReview',
+        parameters: [
+          {
+            name: 'appointmentId',
+            in: 'path',
+            description: 'ID of the appointment to post a review for.',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  review: {
+                    type: 'string',
+                    example:
+                      'Dr. Rafiq was very attentive and explained everything clearly. I felt genuinely cared for during my consultation.',
+                  },
+                  rating: {
+                    type: 'number',
+                    example: 5,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Review posted successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Review created successfully.',
+                    },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        review: {
+                          $ref: '#/components/schemas/Review',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: 'Invalid input or validation failed',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Validation failed.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description:
+              'Unauthorized access. Only logged-in patients can access this route. Log in with a valid `jwt` token.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You are not authorized to access this route. Please log in.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Only logged-in patients can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'You are not allowed to post a review here.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: 'No appointment found with provided ID.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'No appointment found.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+    },
   },
 };

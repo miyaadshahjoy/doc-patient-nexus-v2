@@ -536,30 +536,6 @@ module.exports = {
       },
     },
   },
-  /*
-        {
-  "doctor": "64fc8e27b12d5a9cfdcdef01",
-  "patient": "64fc8e27b12d5a9cfdcdef02",
-  "appointmentDate": "2025-06-16T09:00:00.000Z",
-  "appointmentSchedule": {
-    "day": "monday",
-    "hours": {
-      "from": "09:00",
-      "to": "09:45"
-    }
-  },
-  "status": "confirmed",
-  "reason": "Regular blood pressure check-up and follow-up consultation",
-  "notes": "Patient has been advised to bring previous test reports.",
-  "consultationType": "in-person",
-  "paymentStatus": "paid",
-  "paymentMethod": "card",
-  "paymentIntent": "pi_1HV8XK2eZvKYlo2C5pFAKE123",
-  "isPrescribed": true,
-  "createdAt": "2025-06-13T10:00:00.000Z",
-  "updatedAt": "2025-06-13T10:00:00.000Z"
-}
-*/
   Appointment: {
     type: 'object',
     required: ['doctor', 'patient', 'appointmentDate', 'appointmentSchedule'],
@@ -636,6 +612,150 @@ module.exports = {
       isPrescribed: {
         type: 'boolean',
         default: false,
+      },
+      createdAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-16T18:46:09.776Z',
+      },
+      updatedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-31T02:45:43.207Z',
+      },
+    },
+  },
+  /*
+  {
+  "doctor": "64fc8e27b12d5a9cfdcdef07",
+  "patient": "64fc8e27b12d5a9cfdcdef08",
+  "appointment": "64fc8e27b12d5a9cfdcdef09",
+  "review": "Dr. Rafiq was very attentive and explained everything clearly. I felt genuinely cared for during my consultation.",
+  "rating": 5,
+  "reply": "Thank you for your kind feedback. We're glad to hear about your experience!",
+  "isEdited": false,
+  "status": "visible",
+  "createdAt": "2025-06-13T14:30:00.000Z",
+  "updatedAt": "2025-06-13T14:30:00.000Z"
+}
+
+  */
+  Review: {
+    type: 'object',
+    required: ['doctor', 'patient', 'appointment', 'review', 'rating'],
+    properties: {
+      doctor: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd6',
+      },
+      patient: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd7',
+      },
+      appointment: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd8',
+      },
+      review: {
+        type: 'string',
+        example:
+          'Dr. Rafiq was very attentive and explained everything clearly. I felt genuinely cared for during my consultation.',
+      },
+      rating: {
+        type: 'number',
+        example: 5,
+      },
+      reply: {
+        type: 'string',
+        example:
+          "Thank you for your kind feedback. We're glad to hear about your experience!",
+      },
+      isEdited: {
+        type: 'boolean',
+        default: false,
+      },
+      status: {
+        type: 'string',
+        enum: ['visible', 'flagged', 'hidden'],
+        default: 'visible',
+      },
+      createdAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-16T18:46:09.776Z',
+      },
+      updatedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-31T02:45:43.207Z',
+      },
+    },
+  },
+  PatientRecord: {
+    type: 'object',
+    required: ['patient'],
+    properties: {
+      patient: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd6',
+      },
+      allergies: {
+        type: 'array',
+        example: ['Peanuts', 'Penicillin'],
+      },
+      conditions: {
+        type: 'array',
+        example: ['Hypertension', 'Type 2 Diabetes'],
+      },
+      surgeries: {
+        type: 'array',
+        example: ['Appendectomy (2010)', 'Gallbladder removal (2016)'],
+      },
+      familyHistory: {
+        type: 'array',
+        example: ['Father - Heart disease', 'Mother - Type 2 Diabetes'],
+      },
+      lifestyle: {
+        type: 'object',
+        properties: {
+          badHabits: {
+            type: 'array',
+            example: ['smoking'],
+          },
+          exercise: {
+            type: 'string',
+            example: 'moderate',
+          },
+        },
+      },
+      medications: {
+        type: 'array',
+        example: ['682787f1fea3f44089558cd7', '682787f1fea3f44089558cd8'],
+      },
+      reports: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['title', 'fileUrl', 'issuedBy', 'issuedOn'],
+          properties: {
+            title: {
+              type: 'string',
+              example: 'Blood Test Report',
+            },
+            fileUrl: {
+              type: 'string',
+              example: 'https://example.com/reports/bloodtest_jan2025.pdf',
+            },
+            issuedBy: {
+              type: 'string',
+              example: 'Dr. Nafisa Rahman',
+            },
+            issuedOn: {
+              type: 'string',
+              example: '2025-01-15T00:00:00.000Z',
+            },
+          },
+        },
       },
       createdAt: {
         type: 'string',

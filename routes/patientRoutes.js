@@ -20,6 +20,7 @@ router.use('/doctors', doctorRouter);
 
 // patients/appointments/:id/cancel-appointment
 // patients/appointments/:id/checkout-session
+// POST/patients/appointments/{appointmentId}/reviews
 router.use('/appointments', appointmentRouter);
 
 router.post('/forgot-password', authController.forgotPassword(Patient));

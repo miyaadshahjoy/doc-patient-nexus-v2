@@ -17,7 +17,7 @@ exports.postReview = catchAsync(async (req, res, next) => {
 
   const appointment = await Appointment.findById(appointmentId);
   if (!appointment)
-    return next(new AppError('No appointment found with provided Id', 404));
+    return next(new AppError('No appointment found with provided ID.', 404));
 
   if (!appointment.patient.equals(req.user._id))
     return next(

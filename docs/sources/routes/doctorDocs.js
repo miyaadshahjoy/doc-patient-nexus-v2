@@ -1213,5 +1213,385 @@ module.exports = {
         },
       },
     },
+    // POST /doctors/patients/{patientId}/patient-records
+    '/api/v2/doctors/patients/{patientId}/records': {
+      post: {
+        tags: ['Doctors'],
+        summary: 'Create a patient-record for a patient.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+        description:
+          'Allows a doctor to `create a patient-record` for a patient. A doctor must be `logged in` to use this route.',
+        operationId: 'createPatientRecord',
+        parameters: [
+          {
+            name: 'patientId',
+            in: 'path',
+            description: 'ID of the patient to create a record for.',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          type: 'object',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  allergies: {
+                    type: 'array',
+                    example: ['Peanuts', 'Penicillin'],
+                  },
+                  conditions: {
+                    type: 'array',
+                    example: ['Hypertension', 'Type 2 Diabetes'],
+                  },
+                  surgeries: {
+                    type: 'array',
+                    example: [
+                      'Appendectomy (2010)',
+                      'Gallbladder removal (2016)',
+                    ],
+                  },
+                  familyHistory: {
+                    type: 'array',
+                    example: [
+                      'Father - Heart disease',
+                      'Mother - Type 2 Diabetes',
+                    ],
+                  },
+                  lifestyle: {
+                    type: 'object',
+                    properties: {
+                      badHabits: {
+                        type: 'array',
+                        example: ['smoking'],
+                      },
+                      exercise: {
+                        type: 'string',
+                        example: 'moderate',
+                      },
+                    },
+                  },
+                  medications: {
+                    type: 'array',
+                    example: [
+                      '64fc8e27b12d5a9cfdcdef20',
+                      '64fc8e27b12d5a9cfdcdef21',
+                    ],
+                  },
+                  reports: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        title: {
+                          type: 'string',
+                          example: 'Blood Test Report',
+                        },
+                        fileUrl: {
+                          type: 'string',
+                          example:
+                            'https://example.com/reports/bloodtest_jan2025.pdf',
+                        },
+                        issuedBy: {
+                          type: 'string',
+                          example: 'Dr. Nafisa Rahman',
+                        },
+                        issuedOn: {
+                          type: 'string',
+                          example: '2025-01-15T00:00:00.000Z',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Patient record created successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Patient record created successfully.',
+                    },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        patientRecord: {
+                          $ref: '#/components/schemas/PatientRecord',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: 'Bad request. Possibly due to invalid input.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'error',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Record already exists for this patient.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description:
+              'Unauthorized access. Only `logged-in Doctors` can access this route. Log in with a valid `jwt` token.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Unauthorized access. Please log in to continue.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Only `logged-in Doctors` can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have permission to perform this action.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: 'No patient found with the provided ID.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'No patient found with the provided ID.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+    },
+
+    // POST/doctors/appointments/{appointmentId}/prescription
+    '/api/v2/doctors/appointments/{appointmentId}/prescription/': {
+      post: {
+        tags: ['Doctors'],
+        summary: 'Create a prescription for an appointment',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+        description:
+          'Allows a doctor to `create a prescription` for an appointment. A doctor must be `logged in` to use this route.',
+        operationId: 'createPrescription',
+        parameters: [
+          {
+            name: 'appointmentId',
+            in: 'path',
+            description: 'ID of the appointment to create a prescription for.',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['medications'],
+                properties: {
+                  notes: {
+                    type: 'string',
+                    example:
+                      'Patient advised to continue medications for 7 days and return for follow-up if symptoms persist.',
+                  },
+                  medications: {
+                    type: 'array',
+                    items: {
+                      $ref: '#/components/schemas/Medication',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Prescription created successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Prescription created successfully.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: 'Bad request. Possibly due to invalid input.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Prescription already exists for this appointment.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description:
+              'Unauthorized access. Only `logged-in Doctors` can access this route. Log in with a valid `jwt` token.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You are not authorized to access this route. Please log in.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Only `logged-in Doctors` can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have the permission to perform this action.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: 'No appointment found with the provided ID.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'No appointment found with the provided ID.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+    },
   },
 };
