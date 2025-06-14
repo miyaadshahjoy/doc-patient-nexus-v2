@@ -24,11 +24,14 @@ router.get(
   doctorController.getDoctorsWithin, // Impl: Get doctors within a certain distance from a given location
 );
 
+// POST /patients/doctors/{doctorId}/available-visiting-hours
 router.post(
   '/:id/available-visiting-hours',
   authController.protect('patient'),
   appointmentController.checkVisitingHours,
 );
+
+// POST/patients/doctors/{doctorId}/book-appointment
 router.post(
   '/:id/book-appointment',
   authController.protect('patient'),

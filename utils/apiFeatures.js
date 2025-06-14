@@ -19,6 +19,7 @@ module.exports = class {
       /\b(gt|gte|lt|lte)\b/g,
       (match) => `$${match}`,
     );
+    console.log(queryString);
     this.query = this.query.find(JSON.parse(queryString));
     return this;
   }

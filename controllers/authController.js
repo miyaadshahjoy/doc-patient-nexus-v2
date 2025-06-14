@@ -55,7 +55,7 @@ exports.signup = (Model) =>
     res.status(201);
     res.json({
       status: 'success',
-      jwt: token,
+
       message: `${resourceName} registered successfully.`,
       data: {
         [resourceName]: newUser,
@@ -127,7 +127,8 @@ exports.protect = () =>
 
     // Dynamically import the model based on user role
     // This assumes that the role is one of 'admin', 'doctor', or 'patient'
-    const Model = getModel(decoded.role);
+    const role = decoded.role === 'super-admin' ? 'admin' : decoded.role;
+    const Model = getModel(role);
 
     // 3) Check if user still exists
     const user = await Model.findById(decoded.id);

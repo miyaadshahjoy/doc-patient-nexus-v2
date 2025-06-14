@@ -140,16 +140,6 @@ module.exports = {
                 },
               },
             },
-            links: {
-              GetSingleDoctorById: {
-                operationId: 'getDoctorById',
-                parameters: {
-                  id: '$response.body#/data/doctors/0/_id',
-                },
-                description:
-                  'Link to get details of the first doctor in the list',
-              },
-            },
           },
           400: {
             description:
@@ -290,8 +280,13 @@ module.exports = {
       patch: {
         tags: ['Doctors'],
         summary: 'Update a Doctor by ID',
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
         description:
-          '**Update a specific Doctor by their `ID`. This endpoint is accessible to `logged-in` Admins only.**',
+          'Update a specific Doctor by their `ID`. This endpoint is accessible to `logged-in` Admins only.',
         operationId: 'updateDoctorById',
         parameters: [
           {
@@ -587,8 +582,13 @@ module.exports = {
       delete: {
         tags: ['Doctors'],
         summary: 'Delete a doctor by ID',
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
         description:
-          '**Delete a specific doctor by their `ID`. This endpoint is accessible to `logged-in` Admins only.**',
+          'Delete a specific doctor by their `ID`. This endpoint is accessible to `logged-in` Admins only.',
         operationId: 'deleteDoctorById',
         parameters: [
           {
@@ -704,7 +704,7 @@ module.exports = {
         tags: ['Doctors'],
         summary: 'Register a new doctor account.',
         description:
-          'Allows a new doctor to register by providing necessary credentials and profile details.',
+          'Allows a new doctor to register by providing necessary credentials and profile details. After registration, you will have to verify you email through the `/api/v2/doctors/email-verification` endpoint. Initially your account will be in a `pending` state. After verification, your account will be `active` and you can log in.',
         operationId: 'signupDoctor',
         requestBody: {
           required: true,
@@ -872,10 +872,7 @@ module.exports = {
                       type: 'string',
                       example: 'success',
                     },
-                    token: {
-                      type: 'string',
-                      example: 'JWT token here',
-                    },
+
                     data: {
                       type: 'object',
                       properties: {
@@ -933,7 +930,8 @@ module.exports = {
       post: {
         tags: ['Doctors'],
         summary: 'Doctor Sign In',
-        description: 'Allows a doctor to sign in using email and password.',
+        description:
+          'Allows a doctor to sign in using email and password. If your email is `not verified`, you will not be able to sign in. Verify your email using the `/api/v2/doctors/email-verification` endpoint. If your account is pending approval by the admin, you will not be able to sign in.<br><br>After successfully logging in use the `jwt` token from the response to authenticate or authorize for accessing protected routes.',
         operationId: 'signinDoctor',
         requestBody: {
           required: true,
@@ -946,7 +944,7 @@ module.exports = {
                   email: {
                     type: 'string',
                     format: 'email',
-                    example: 'zarin.hossain@example.com',
+                    example: 'zarif.hossain@example.com',
                   },
                   password: {
                     type: 'string',
@@ -970,10 +968,7 @@ module.exports = {
                       type: 'string',
                       example: 'success',
                     },
-                    token: {
-                      type: 'string',
-                      example: 'JWT token here',
-                    },
+
                     data: {
                       type: 'object',
                       properties: {
@@ -1054,7 +1049,7 @@ module.exports = {
         tags: ['Doctors'],
         summary: 'Send email verification link',
         description:
-          '**Sends an email verification link to the doctor’s registered email address. The email address is also sent along with the verification token.**',
+          'Sends an `email verification link` to the doctor’s registered email address. The email address is also sent along with the verification token. Collect the token from the email and use it to verify your email using the `/api/v2/doctors/email-verification/{token}` endpoint. The verfication token is valid for 10 minutes. After that, the token will expire and you will have to request a new token using the `/api/v2/doctors/email-verification` endpoint. <br><br>**Note**: The email verification token could be long. Make sure to copy the entire token from the email.',
         operationId: 'sendEmailVerification',
         requestBody: {
           required: true,
@@ -1067,7 +1062,7 @@ module.exports = {
                   email: {
                     type: 'string',
                     format: 'email',
-                    example: 'zarin.hossain@example.com',
+                    example: 'zarif.hossain@example.com',
                   },
                 },
               },
@@ -1142,7 +1137,7 @@ module.exports = {
         tags: ['Doctors'],
         summary: 'Verify doctor’s email.',
         description:
-          '**Verifies the doctor’s email using the token sent to their email address.**',
+          'Verifies the doctor’s email using the token sent to their email address. Collect the token from the email and use it in the parameters section to verify your email. The verfication token is valid for 10 minutes. After that, the token will expire and you will have to request a new token using the `/api/v2/doctors/email-verification` endpoint.<br><br>**Note**: The email verification token could be long. Make sure to copy the entire token from the email.',
         operationId: 'verifyDoctorEmail',
         parameters: [
           {

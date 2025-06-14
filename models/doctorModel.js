@@ -194,15 +194,7 @@ const doctorSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Consultation fee is required.'],
     },
-    role: {
-      type: String,
-      default: 'doctor',
-      immutable: true,
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
+
     status: {
       type: String,
       enum: {
@@ -211,6 +203,15 @@ const doctorSchema = new mongoose.Schema(
       },
       default: 'pending',
       trim: true,
+    },
+    role: {
+      type: String,
+      default: 'doctor',
+      immutable: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     emailVerified: {
       type: Boolean,

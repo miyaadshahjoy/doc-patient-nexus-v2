@@ -48,6 +48,12 @@ const patientSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please confirm your password'],
       validate: {
+        /**
+         * Validates if the provided element matches the password.
+         *
+         * @param {string} el - The element to be compared with the password.
+         * @returns {boolean} True if the element matches the password, otherwise false.
+         */
         validator: function (el) {
           return this.password === el;
         },

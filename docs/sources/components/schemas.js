@@ -52,14 +52,14 @@ module.exports = {
         default: 'admin',
         example: 'admin',
       },
-      isVerified: {
-        type: 'boolean',
-        example: false,
-      },
       status: {
         type: 'string',
         enum: ['active', 'pending', 'removed'],
         example: 'pending',
+      },
+      isVerified: {
+        type: 'boolean',
+        example: false,
       },
       emailVerified: {
         type: 'boolean',
@@ -387,22 +387,23 @@ module.exports = {
         },
         example: ['Levothyroxine', 'Iron Supplements'],
       },
+      // location: {
+      //   type: {
+      //     city: {
+      //       type: String,
+      //       trim: true,
+      //     },
+      //     address: {
+      //       type: String,
+      //       trim: true,
+      //     },
+      //   },
+      //   required: [true, 'Location is required.'],
+      // },
       location: {
         type: 'object',
-        required: ['type', 'coordinates', 'city', 'address'],
+        required: ['city', 'address'],
         properties: {
-          type: {
-            type: 'string',
-            enum: ['Point'],
-            example: 'Point',
-          },
-          coordinates: {
-            type: 'array',
-            items: {
-              type: 'number',
-            },
-            example: [90.412518, 23.810332],
-          },
           city: {
             type: 'string',
             example: 'Dhaka',
@@ -522,6 +523,119 @@ module.exports = {
             instruction: 'Take after meals.',
           },
         ],
+      },
+      createdAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-16T18:46:09.776Z',
+      },
+      updatedAt: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-05-31T02:45:43.207Z',
+      },
+    },
+  },
+  /*
+        {
+  "doctor": "64fc8e27b12d5a9cfdcdef01",
+  "patient": "64fc8e27b12d5a9cfdcdef02",
+  "appointmentDate": "2025-06-16T09:00:00.000Z",
+  "appointmentSchedule": {
+    "day": "monday",
+    "hours": {
+      "from": "09:00",
+      "to": "09:45"
+    }
+  },
+  "status": "confirmed",
+  "reason": "Regular blood pressure check-up and follow-up consultation",
+  "notes": "Patient has been advised to bring previous test reports.",
+  "consultationType": "in-person",
+  "paymentStatus": "paid",
+  "paymentMethod": "card",
+  "paymentIntent": "pi_1HV8XK2eZvKYlo2C5pFAKE123",
+  "isPrescribed": true,
+  "createdAt": "2025-06-13T10:00:00.000Z",
+  "updatedAt": "2025-06-13T10:00:00.000Z"
+}
+*/
+  Appointment: {
+    type: 'object',
+    required: ['doctor', 'patient', 'appointmentDate', 'appointmentSchedule'],
+    properties: {
+      doctor: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd6',
+      },
+      patient: {
+        type: 'string',
+        example: '682787f1fea3f44089558cd7',
+      },
+      appointmentDate: {
+        type: 'string',
+        format: 'date-time',
+        example: '2025-06-16T09:00:00.000Z',
+      },
+      appointmentSchedule: {
+        type: 'object',
+        required: ['day', 'hours'],
+        properties: {
+          day: {
+            type: 'string',
+            example: 'monday',
+          },
+          hours: {
+            type: 'object',
+            required: ['from', 'to'],
+            properties: {
+              from: {
+                type: 'string',
+                example: '09:00',
+              },
+              to: {
+                type: 'string',
+                example: '09:59',
+              },
+            },
+          },
+        },
+      },
+      status: {
+        type: 'string',
+        enum: ['confirmed', 'cancelled', 'completed'],
+        default: 'confirmed',
+      },
+      reason: {
+        type: 'string',
+        example: 'Regular blood pressure check-up and follow-up consultation',
+      },
+      notes: {
+        type: 'string',
+        example: 'Patient has been advised to bring previous test reports.',
+      },
+      consultationType: {
+        type: 'string',
+        enum: ['in-person', 'online'],
+        default: 'in-person',
+      },
+      paymentStatus: {
+        type: 'string',
+        enum: ['paid', 'unpaid'],
+        default: 'unpaid',
+      },
+      paymentMethod: {
+        type: 'string',
+        enum: ['card', 'cash'],
+        default: 'card',
+      },
+      paymentIntent: {
+        type: 'string',
+        example: 'pi_1HV8XK2eZvKYlo2C5pFAKE123',
+      },
+      isPrescribed: {
+        type: 'boolean',
+        default: false,
       },
       createdAt: {
         type: 'string',

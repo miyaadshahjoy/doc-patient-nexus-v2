@@ -1,9 +1,12 @@
 const swaggerJsDoc = require('swagger-jsdoc');
 const path = require('path');
+const superAdminDocs = require('../sources/routes/superAdminDocs');
 const adminDocs = require('../sources/routes/adminDocs');
 const doctorDocs = require('../sources/routes/doctorDocs');
 const patientDocs = require('../sources/routes/patientDocs');
 const prescriptionDocs = require('../sources/routes/prescriptionDocs');
+const schemas = require('../sources/components/schemas');
+const responses = require('../sources/components/responses');
 
 const options = {
   definition: {
@@ -29,8 +32,8 @@ const options = {
       },
     ],
     components: {
-      schemas: require('../sources/components/schemas'),
-      responses: require('../sources/components/responses'),
+      schemas,
+      responses,
       securitySchemes: {
         bearerAuth: {
           type: 'http',
@@ -39,7 +42,7 @@ const options = {
         },
       },
     },
-    security: [{ bearerAuth: [] }],
+
     tags: [
       // {
       //   name: 'Super Admins',
@@ -63,6 +66,7 @@ const options = {
 const swaggerSpec = swaggerJsDoc(options);
 swaggerSpec.paths = {
   ...swaggerSpec.paths,
+  ...superAdminDocs.paths,
   ...adminDocs.paths,
   ...doctorDocs.paths,
   ...patientDocs.paths,

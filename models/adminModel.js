@@ -61,10 +61,6 @@ const adminSchema = new mongoose.Schema(
       default: 'admin',
       immutable: true,
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
     status: {
       type: String,
       enum: {
@@ -78,13 +74,23 @@ const adminSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
 
     ///////////////////////////////////////////
     passwordChangedAt: {
       type: Date,
     },
-    passwordResetToken: String,
-    passwordResetExpires: Date,
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
+    passwordResetExpires: {
+      type: Date,
+      select: false,
+    },
     emailVerificationToken: {
       type: String,
       select: false,
@@ -94,7 +100,7 @@ const adminSchema = new mongoose.Schema(
       select: false,
     },
   },
-  { timestamps: true },
+  { timestamps: true }, // adds createdAt and updatedAt
 );
 
 // instance methods

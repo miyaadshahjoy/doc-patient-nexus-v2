@@ -14,9 +14,8 @@ const Patient = require('../models/patientModel');
 
 const router = express.Router({ mergeParams: true });
 
-// patients/doctors/:id/book-appointment
-// patients/doctors/:id/available-visiting-hours
-
+// POST /patients/doctors/{doctorId}/available-visiting-hours
+// POST/patients/doctors/{doctorId}/book-appointment
 router.use('/doctors', doctorRouter);
 
 // patients/appointments/:id/cancel-appointment
@@ -32,17 +31,12 @@ router.post(
 router.post('/signup', authController.signup(Patient));
 router.post('/signin', authController.signin(Patient));
 
-router.get(
+router.post(
   '/email-verification',
-
   authController.sendEmailVerification(Patient),
 );
 
-router.patch(
-  '/email-verification/:token',
-
-  authController.verifyEmail(Patient),
-);
+router.patch('/email-verification/:token', authController.verifyEmail(Patient));
 
 // router.use(checkAccountEligibility(Patient));
 router.patch(
@@ -69,14 +63,12 @@ router.delete(
 
 // Get all patietns
 // TODO: Add pagination, filtering, sorting and field selection
-router
-  .route('/')
-  .get(
-    authController.protect(),
-    checkAccountEligibility(),
-    authController.restrictTo('admin', 'super-admin', 'doctor'),
-    handlerFactory.readAll(Patient),
-  );
+router.route('/').get(
+  authController.protect(),
+  checkAccountEligibility(),
+  authController.restrictTo('admin', 'super-admin', 'doctor'),
+  handlerFactory.readAll(Patient), // FIXME: virtual property age shows up even if not selected.
+);
 
 router
   .route('/:id')

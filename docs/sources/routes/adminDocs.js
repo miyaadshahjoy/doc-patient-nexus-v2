@@ -23,12 +23,12 @@ const responses = require('../components/responses');
 
 module.exports = {
   paths: {
-    'api/v2/admins/signup': {
+    '/api/v2/admins/': {
       post: {
         tags: ['Admins'],
         summary: 'Register a new admin account.',
         description:
-          'Allows a new admin to register by providing necessary credentials and profile details.',
+          'Allows a new admin to register by providing necessary credentials and profile details. After registration, you will have to verify your email through the `/api/v2/admins/email-verification` endpoint. Initially your account will be in a `pending` state. After verification, your account will be `active` and you can log in.',
         operationId: 'signupAdmin',
         requestBody: {
           required: true,
@@ -71,79 +71,85 @@ module.exports = {
                     example: 'pass1234',
                   },
                 },
-                responses: {
-                  201: {
-                    description: 'Admin registered successfully',
-                    content: {
-                      'application/json': {
-                        schema: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'string',
-                              example: 'success',
-                            },
-                            token: {
-                              type: 'string',
-                              example: 'JWT token here',
-                            },
-                            data: {
-                              type: 'object',
-                              properties: {
-                                admin: { $ref: '#/components/schemas/Admin' },
-                              },
-                            },
-                          },
-                        },
+              },
+            },
+          },
+        },
+
+        responses: {
+          201: {
+            description: 'Admin registered successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+
+                    data: {
+                      type: 'object',
+                      properties: {
+                        admin: { $ref: '#/components/schemas/Admin' },
                       },
                     },
                   },
-                  400: {
-                    description: 'Invalid input or validation failed',
-                    content: {
-                      'application/json': {
-                        schema: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'string',
-                              example: 'fail',
-                            },
-                            message: {
-                              type: 'string',
-                              example: 'Passwords do not match',
-                            },
-                          },
-                        },
-                      },
+                },
+              },
+            },
+
+            // link to email verification route
+            // links: {
+            //   emailVerification: {
+            //     description: 'Link to verify newly registered admin’s email.',
+            //     operationId: 'sendEmailVerification',
+            //   },
+            // },
+          },
+          400: {
+            description: 'Invalid input or validation failed',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Passwords do not match',
                     },
                   },
-                  409: {
-                    description: 'Email or phone number already in use.',
-                    content: {
-                      'application/json': {
-                        schema: {
-                          type: 'object',
-                          properties: {
-                            status: {
-                              type: 'string',
-                              example: 'fail',
-                            },
-                            message: {
-                              type: 'string',
-                              example:
-                                'Email already exists. Please use a different email.',
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                  500: responses.InternalServerError,
                 },
               },
             },
           },
+          409: {
+            description: 'Email or phone number already in use.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Email already exists. Please use a different email.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
         },
       },
     },
@@ -272,7 +278,7 @@ module.exports = {
         tags: ['Admins'],
         summary: 'Send email verification link',
         description:
-          '**Sends an `email verification link` to the admins’s registered email address. The email address is also sent along with the verification token.**',
+          'Sends an `email verification link` to the admins’s registered email address. The email address is also sent along with the verification token. Collect the token from the email and use it to verify your email using the `/api/v2/admins/email-verification/{token}` endpoint. The verfication token is valid for 10 minutes. After that, the token will expire and you will have to request a new token using the `/api/v2/admins/email-verification` endpoint. <br><br>**Note**: The email verification token could be long. Make sure to copy the entire token from the email.',
         operationId: 'sendEmailVerification',
         requestBody: {
           required: true,
@@ -360,12 +366,12 @@ module.exports = {
     },
 
     // Email verification route
-    '/api/v2/admin/email-verification/{token}': {
+    '/api/v2/admins/email-verification/{token}': {
       patch: {
         tags: ['Admins'],
         summary: 'Verify admin’s email.',
         description:
-          '**Verifies the admin’s email using the token sent to their email address.**',
+          'Verifies the admin’s email using the token sent to their email address. Collect the token from the email and use it in the parameters section to verify your email. The verfication token is valid for 10 minutes. After that, the token will expire and you will have to request a new token using the `/api/v2/admins/email-verification` endpoint.<br><br>**Note**: The email verification token could be long. Make sure to copy the entire token from the email.',
         operationId: 'verifyAdminEmail',
         parameters: [
           {
@@ -455,9 +461,11 @@ module.exports = {
         summary: 'Get currently logged in admin profile.',
         description:
           '**Fetches the profile information of the currently logged in admin. The admin must be `logged in` and have a valid `JWT` token.**',
-        security: {
-          bearerAuth: [], // This indicates that the endpoint requires authentication
-        },
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
         responses: {
           200: {
             description: 'Admin profile fetched successfully.',
@@ -553,10 +561,12 @@ module.exports = {
         tags: ['Admins'],
         summary: 'Update Admin Profile.',
         description:
-          '**Allows an admin to update their profile information. The admin must be `logged in` and have a valid `JWT` token.**',
-        security: {
-          bearerAuth: [], // This indicates that the endpoint requires authentication
-        },
+          'Allows an admin to update their profile information. The admin must be `logged in` and have a valid `JWT` token.',
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
         /*
         Forbidden fields:
           'specialization',
@@ -693,9 +703,11 @@ module.exports = {
       delete: {
         tags: ['Admins'],
         summary: 'Delete Admin Account.',
-        security: {
-          bearerAuth: [], // This indicates that the endpoint requires authentication
-        },
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
         description:
           '**Allows an admin to delete their own account. The admin must be `logged in` with a valid `JWT` token.**',
         responses: {
@@ -755,11 +767,13 @@ module.exports = {
       patch: {
         tags: ['Admins'],
         summary: 'Approve Doctor Account.',
-        security: {
-          bearerAuth: [], // This indicates that the endpoint requires authentication
-        },
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
         description:
-          '**Allows an admin with an active and verified account to approve a doctor account by ID. The doctor must be in a pending state. Requires a valid `JWT` token with admin privileges.**',
+          'Allows an admin with an active and verified account to approve a doctor account by ID. The doctor must be in a pending state. Requires a valid `JWT` token with admin privileges.',
         parameters: [
           {
             name: 'doctorId',
@@ -890,11 +904,13 @@ module.exports = {
       patch: {
         tags: ['Admins'],
         summary: 'Approve patient account.',
-        security: {
-          bearerAuth: [], // This indicates that the endpoint requires authentication
-        },
+        security: [
+          {
+            bearerAuth: [], // This indicates that the endpoint requires authentication
+          },
+        ],
         description:
-          '**Allows an admin with an active and verified account to approve a patient account by ID. The patient must be in a pending state. Requires a valid `JWT` token with admin privileges.**',
+          'Allows an admin with an active and verified account to approve a patient account by ID. The patient must be in a pending state. Requires a valid `JWT` token with admin privileges',
         parameters: [
           {
             name: 'patientId',

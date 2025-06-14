@@ -8,6 +8,7 @@ const prescriptionRouter = require('./prescriptionRoutes');
 const router = express.Router({ mergeParams: true });
 
 router.use('/:id/reviews', reviewRouter);
+
 // doctors/appointments/:id/prescription
 router.use('/:id/prescription', prescriptionRouter);
 
