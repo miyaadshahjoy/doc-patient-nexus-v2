@@ -39,7 +39,7 @@ A robust, scalable, and production-ready API built for managing doctor-patient a
 
 ## 🔑 Data Models
 
-https://github.com/miyaadshahjoy/docpatient-nexus-api-v2/blob/main/public/assets/Data%20Models/docPatient-nexus%20diagram%20-%20Model.svg
+![My SVG](https://github.com/miyaadshahjoy/docpatient-nexus-api-v2/blob/main/public/assets/Data%20Models/docPatient-nexus%20diagram%20-%20Model.svg)
 
 ## 📚 Current Modules
 
