@@ -35,11 +35,13 @@ const prescriptionSchema = mongoose.Schema(
       ref: 'Doctor',
       required: [true, 'Doctor is required.'],
     },
-    patient: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Patient',
-      required: [true, 'Patient is required.'],
-    },
+
+    // Data Referencing changed from parent referencing to child referencing
+    // patient: {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: 'Patient',
+    //   required: [true, 'Patient is required.'],
+    // },
     appointment: {
       type: mongoose.Schema.ObjectId,
       ref: 'Appointment',

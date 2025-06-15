@@ -17,16 +17,17 @@ exports.createRecord = catchAsync(async (req, res, next) => {
   // TODO: Doctors who have no appointment with the patient should not be able to create a record.
   // Check if the user is a doctor and has permission to create a record for the patient
 
-  const existingRecord = await PatientRecord.findOne({ patient: patientId });
-  if (existingRecord)
-    return next(new AppError('Record already exists for this patient.', 400));
-
   // Check if the patient exists
   const patient = await Patient.findById(patientId);
   if (!patient)
     return next(new AppError('No patient found with the provided ID.', 404));
 
-  req.body.patient = patientId;
+  // const recordExists = patient.patientRecords;
+
+  if (patient.patientRecords)
+    return next(new AppError('Record already exists for this patient.', 400));
+  // req.body.patient = patientId;
+
   const prescriptions = await Prescription.find({
     patient: patientId,
     status: 'active',
@@ -37,15 +38,26 @@ exports.createRecord = catchAsync(async (req, res, next) => {
   const medicationsIds = medications.map((med) => med._id);
   req.body.medications = medicationsIds;
 
-  const record = await PatientRecord.create(req.body);
-  if (!record)
+  const newRecord = await PatientRecord.create(req.body);
+  if (!newRecord)
     return next(new AppError('Internal error. Failed to create record.', 500));
+  try {
+    patient.patientRecords = newRecord;
+    await patient.save();
+  } catch (error) {
+    return next(
+      new AppError(
+        'Internal error. Failed to add patient record to patient.',
+        500,
+      ),
+    );
+  }
 
   res.status(201).json({
     status: 'success',
     message: 'Patient record created successfully.',
     data: {
-      record,
+      newRecord,
     },
   });
 });
@@ -73,7 +85,7 @@ exports.uploadRecord = catchAsync(async (req, res, next) => {
   const patient = await Patient.findById(patientId);
   if (!patient)
     return next(new AppError('No patient found with the provided ID.', 404));
-  const existingRecord = await PatientRecord.findOne({ patient: patient._id });
+  const existingRecord = await PatientRecord.findById(patient.patientRecords);
   if (!existingRecord)
     return next(new AppError('No record found for this patient.', 404));
   // Add the uploaded file path to the record
@@ -87,7 +99,7 @@ exports.uploadRecord = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: 'success',
-    message: 'Report uploaded successfully.',
+    message: 'Patient report uploaded successfully.',
     data: {
       record,
     },

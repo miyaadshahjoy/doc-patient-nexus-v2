@@ -105,6 +105,17 @@ const patientSchema = new mongoose.Schema(
       },
       required: [true, 'Location is required.'],
     },
+    // Child referencing
+    prescriptions: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Prescription',
+      },
+    ],
+    patientRecords: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'PatientRecord',
+    },
     status: {
       type: String,
       enum: {
@@ -174,6 +185,14 @@ patientSchema.pre('save', async function (next) {
 patientSchema.pre(/^find/, function (next) {
   // this points to the current query
   this.find({ status: { $ne: 'removed' } });
+  next();
+});
+
+patientSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'prescriptions',
+    select: '-__v',
+  });
   next();
 });
 

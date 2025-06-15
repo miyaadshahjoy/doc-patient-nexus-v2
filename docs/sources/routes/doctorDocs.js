@@ -1213,7 +1213,7 @@ module.exports = {
         },
       },
     },
-    // POST /doctors/patients/{patientId}/patient-records
+    // POST /doctors/patients/{patientId}/records
     '/api/v2/doctors/patients/{patientId}/records': {
       post: {
         tags: ['Doctors'],
@@ -1230,7 +1230,7 @@ module.exports = {
           {
             name: 'patientId',
             in: 'path',
-            description: 'ID of the patient to create a record for.',
+            description: 'ID of the patient to create a patient-record for.',
             required: true,
             schema: {
               type: 'string',
@@ -1424,6 +1424,174 @@ module.exports = {
                     message: {
                       type: 'string',
                       example: 'No patient found with the provided ID.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          500: responses.InternalServerError,
+        },
+      },
+      // PATCH/doctors/patients/{patientId}/records
+      patch: {
+        tags: ['Doctors'],
+        summary: 'Update a patient-record for a patient.',
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+        description:
+          'Allows a doctor to `update a patient-record` for a patient. A doctor must be `logged in` to use this route.<br><br>**Note:** In order to update a patient-record, the patient must have an existing patient-record. A patient-record can be created by a doctor using the `/doctors/patients/{patientId}/records` route.',
+        operationId: 'updatePatientRecord',
+        parameters: [
+          {
+            name: 'patientId',
+            in: 'path',
+            description: 'ID of the patient to update a patient-record for.',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: {
+                    type: 'string',
+                    example: 'Hematology Analysis Report',
+                  },
+                  issuedBy: {
+                    type: 'string',
+                    example: 'Dr. Nafisa Rahman',
+                  },
+                  issuedOn: {
+                    type: 'string',
+                    formate: 'date-time',
+                    example: '2025-06-02T17:49:00+06:00',
+                  },
+                  record: {
+                    type: 'string',
+                    format: 'binary',
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Patient record updated successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'success',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Patient report uploaded successfully.',
+                    },
+                    data: {
+                      type: 'object',
+                      properties: {
+                        patientRecord: {
+                          $ref: '#/components/schemas/PatientRecord',
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: 'Bad request. Possibly due to invalid input.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'error',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'Missing required fields in request body.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          401: {
+            description:
+              'Unauthorized access. Only `logged-in Doctors` can access this route. Log in with a valid `jwt` token.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'Unauthorized access. Please log in to continue.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description:
+              'Forbidden access. Only `logged-in Doctors` can access this route.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example:
+                        'You do not have permission to perform this action.',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: 'No patient found with the provided ID.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    status: {
+                      type: 'string',
+                      example: 'fail',
+                    },
+                    message: {
+                      type: 'string',
+                      example: 'No record found for this patient.',
                     },
                   },
                 },

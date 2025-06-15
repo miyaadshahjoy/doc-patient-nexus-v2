@@ -7,12 +7,19 @@ const upload = require('../utils/multer');
 
 const router = express.Router({ mergeParams: true });
 
+// POST/doctors/patients/{patientId}/records
 router
   .route('/')
-  .post(authController.protect('doctor'), patientRecordController.createRecord)
+  .post(
+    authController.protect(),
+    authController.restrictTo('doctor'),
+    patientRecordController.createRecord,
+  )
+  // PATCH/doctors/patients/{patientId}/records
   .patch(
-    authController.protect('doctor'),
-    upload.single('record', 5),
+    authController.protect(),
+    authController.restrictTo('doctor'),
+    upload.single('record'),
     patientRecordController.uploadRecord,
   );
 

@@ -13,7 +13,8 @@ const Doctor = require('../models/doctorModel');
 
 const router = express.Router({ mergeParams: true });
 
-// POST /doctors/patients/{patientId}/patient-records
+// POST /doctors/patients/{patientId}/records
+// PATCH/doctors/patients/{patientId}/records
 router.use('/patients/:id/records', patientRecordRouter);
 
 // POST/doctors/appointments/{patientId}/prescription

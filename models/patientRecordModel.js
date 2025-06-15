@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 
 const patientRecordSchema = new mongoose.Schema(
   {
-    patient: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Patient',
-      unique: true,
-      required: [true, 'Patient is required.'],
-    },
+    // Parent referencing is changed to child referencing
+    // patient: {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: 'Patient',
+    //   unique: true,
+    //   required: [true, 'Patient is required.'],
+    // },
     allergies: [
       {
         type: String,

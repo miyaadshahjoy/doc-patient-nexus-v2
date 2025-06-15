@@ -49,6 +49,7 @@ exports.postReview = catchAsync(async (req, res, next) => {
       { session },
     );
 
+    // Update the doctor's average rating using a transaction in a static method
     await Review.calcAverageRating(appointment.doctor, session);
 
     await session.commitTransaction();
